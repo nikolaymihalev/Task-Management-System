@@ -47,6 +47,7 @@ namespace TaskMaster.Infrastructure.Models
         [Comment("User identifier")]
         public string UserId { get; set; } = string.Empty;
 
+
         [ForeignKey(nameof(TaskId))]
         public Task Task { get; set; } = null!;
 

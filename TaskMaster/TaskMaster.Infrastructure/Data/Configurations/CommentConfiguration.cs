@@ -8,9 +8,13 @@ namespace TaskMaster.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
+            var seed = new SeedData();
+
             builder.HasOne(x => x.Task)
                 .WithMany(x => x.Comments)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasData(seed.Comment);
         }
     }
 }

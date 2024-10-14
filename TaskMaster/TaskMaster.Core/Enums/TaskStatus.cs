@@ -1,4 +1,4 @@
-﻿namespace TaskMaster.Infrastructure.Enums
+﻿namespace TaskMaster.Core.Enums
 {
     /// <summary>
     /// Enum representing the status of a task.
