@@ -122,7 +122,7 @@ namespace TaskMaster.Core.Services
                 throw new ArgumentException(Messages.DoesntExistErrorMessage);
             
 
-            await repository.DeleteAsync<Infrastructure.Models.Task>(task);
+            await repository.DeleteAsync<Infrastructure.Models.Task>(id);
         }
     }
 }
