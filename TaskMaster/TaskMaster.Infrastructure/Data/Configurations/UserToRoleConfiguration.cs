@@ -10,7 +10,7 @@ namespace TaskMaster.Infrastructure.Data.Configurations
         {
             var seed = new SeedData();
 
-            builder.HasData(new IdentityUserRole<string>[] { seed.AdminToAdminRole, seed.JohnToUserRole, seed.PeterToUserRole });
+            builder.HasData(new IdentityUserRole<string>[] { seed.AdminToAdminRole, seed.JohnToUserRole});
         }
     }
 }

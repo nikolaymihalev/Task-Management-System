@@ -20,10 +20,8 @@ namespace TaskMaster.Infrastructure.Data
         public IdentityRole AdminRole { get; set; } = null!;
         public IdentityUser Admin { get; set; } = null!;
         public IdentityUser John { get; set; } = null!;
-        public IdentityUser Peter { get; set; } = null!;
         public IdentityUserRole<string> AdminToAdminRole { get; set; } = null!;
         public IdentityUserRole<string> JohnToUserRole { get; set; } = null!;
-        public IdentityUserRole<string> PeterToUserRole { get; set; } = null!;
         public Task Task { get; set; } = null!;
         public Notification Notification { get; set; } = null!;
         public Comment Comment { get; set; } = null!;
@@ -65,20 +63,10 @@ namespace TaskMaster.Infrastructure.Data
                 NormalizedEmail = "JOHN@GMAIL.COM"
             };
 
-            Peter = new IdentityUser()
-            {
-                Id = "98e1c54e-cc2b-4c09-8678-b0fba336e522",
-                UserName = "Peter",
-                NormalizedUserName = "PETER",
-                Email = "peter@gmail.com",
-                NormalizedEmail = "PETER@GMAIL.COM"
-            };
-
             var passwordHasher = new PasswordHasher<IdentityUser>();
 
             Admin.PasswordHash = passwordHasher.HashPassword(Admin, "admin1234");
             John.PasswordHash = passwordHasher.HashPassword(John, "john1234");
-            Peter.PasswordHash = passwordHasher.HashPassword(Peter, "peter1234");
         }
 
         private void SeedUsersToRoles() 
@@ -92,12 +80,6 @@ namespace TaskMaster.Infrastructure.Data
             JohnToUserRole = new IdentityUserRole<string>()
             {
                 UserId = John.Id,
-                RoleId = UserRole.Id
-            };
-
-            PeterToUserRole = new IdentityUserRole<string>()
-            {
-                UserId = Peter.Id,
                 RoleId = UserRole.Id
             };
         }
@@ -121,10 +103,10 @@ namespace TaskMaster.Infrastructure.Data
             Comment = new Comment()
             {
                 Id = 1,
-                Content = "Great idea! Let's discuss this in the next meeting.",
+                Content = "Add custom font.",
                 DateSent = new DateTime(2024, 10, 15),
                 TaskId = Task.Id,
-                UserId = Peter.Id
+                UserId = John.Id
             };
         }
 
@@ -133,7 +115,7 @@ namespace TaskMaster.Infrastructure.Data
             Notification = new Notification()
             {
                 Id = 1,
-                Message = "Peter commented on the task 'Design Landing Page'.",
+                Message = "Added new task!",
                 DateSent = new DateTime(2024, 10, 15),
                 UserId = John.Id
             };

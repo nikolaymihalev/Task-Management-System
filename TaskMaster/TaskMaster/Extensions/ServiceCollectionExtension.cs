@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskMaster.Infrastructre.Data;
+using TaskMaster.Infrastructure.Common;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,6 +18,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddScoped<IRepository, Repository>();
 
             return services;
         }

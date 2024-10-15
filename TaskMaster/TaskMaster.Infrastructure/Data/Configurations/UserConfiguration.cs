@@ -9,7 +9,7 @@ namespace TaskMaster.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<IdentityUser> builder)
         {
             var seed = new SeedData();
-            builder.HasData(new IdentityUser[] { seed.Admin, seed.John, seed.Peter });
+            builder.HasData(new IdentityUser[] { seed.Admin, seed.John});
         }
     }
 }
