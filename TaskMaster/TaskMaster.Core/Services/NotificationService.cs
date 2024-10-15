@@ -39,11 +39,14 @@ namespace TaskMaster.Core.Services
 
         public async Task DeleteAsync(int id)
         {
-            var notification = await repository.GetByIdAsync<Notification>(id);
-
-            if (notification == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
-
+            try
+            {
+                var notification = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             await repository.DeleteAsync<Notification>(id);
         }
@@ -86,10 +89,15 @@ namespace TaskMaster.Core.Services
 
         public async Task<NotificationInfoModel> GetNotificationByIdAsync(int id)
         {
-            var notification = await repository.GetByIdAsync<Notification>(id);
-
-            if (notification == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+            Notification? notification = null;
+            try
+            {
+                notification = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             return new NotificationInfoModel()
             {
@@ -98,6 +106,16 @@ namespace TaskMaster.Core.Services
                 DateSent = notification.DateSent.ToString("dd/MM/yyyy"),
                 UserId = notification.UserId
             };
+        }
+
+        private async Task<Notification> GetByIdAsync(int id) 
+        {
+            var notification = await repository.GetByIdAsync<Notification>(id);
+
+            if (notification == null)
+                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+
+            return notification;
         }
     }
 }

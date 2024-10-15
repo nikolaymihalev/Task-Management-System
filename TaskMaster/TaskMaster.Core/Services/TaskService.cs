@@ -36,10 +36,16 @@ namespace TaskMaster.Core.Services
 
         public async Task<TaskInfoModel> GetTaskByIdAsync(int id)
         {
-            var model = await repository.GetByIdAsync<Infrastructure.Models.Task>(id);
+            Infrastructure.Models.Task? model = null;
 
-            if (model == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+            try
+            {
+                model = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             return new TaskInfoModel()
             {
@@ -100,29 +106,46 @@ namespace TaskMaster.Core.Services
 
         public async Task EditAsync(TaskFormModel model)
         {
-            var task = await repository.GetByIdAsync<Infrastructure.Models.Task>(model.Id);
+            try
+            {
+                var task = await GetByIdAsync(model.Id);
 
-            if(task == null) 
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
-
-            task.Title = model.Title;
-            task.Description = model.Description;
-            task.DueTime = model.DueTime;
-            task.Priority = ((TaskPriority)model.Priority).ToString();
-            task.Status = ((TaskStatus)model.Status).ToString();
+                task.Title = model.Title;
+                task.Description = model.Description;
+                task.DueTime = model.DueTime;
+                task.Priority = ((TaskPriority)model.Priority).ToString();
+                task.Status = ((TaskStatus)model.Status).ToString();
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }            
 
             await repository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var task = await repository.GetByIdAsync<Infrastructure.Models.Task>(id);
-
-            if (task == null)            
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
-            
+            try
+            {
+                var task = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             await repository.DeleteAsync<Infrastructure.Models.Task>(id);
+        }
+
+        private async Task<Infrastructure.Models.Task> GetByIdAsync(int id)
+        {
+            var task = await repository.GetByIdAsync<Infrastructure.Models.Task>(id);
+
+            if (task == null)
+                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+
+            return task;
         }
     }
 }

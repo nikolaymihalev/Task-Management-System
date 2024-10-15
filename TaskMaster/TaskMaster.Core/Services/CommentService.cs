@@ -40,32 +40,45 @@ namespace TaskMaster.Core.Services
 
         public async Task DeleteAsync(int id)
         {
-            var comment = await repository.GetByIdAsync<Comment>(id);
-
-            if (comment == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+            try
+            {
+                var comment = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             await repository.DeleteAsync<Comment>(id);
         }
 
         public async Task EditAsync(CommentFormModel model)
         {
-            var comment = await repository.GetByIdAsync<Comment>(model.Id);
-
-            if (comment == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
-
-            comment.Content = model.Content;
+            try
+            {
+                var comment = await GetByIdAsync(model.Id);
+                comment.Content = model.Content;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             await repository.SaveChangesAsync();
         }
 
         public async Task<CommentInfoModel> GetCommentByIdAsync(int id)
         {
-            var comment = await repository.GetByIdAsync<Comment>(id);
+            Comment? comment = null;
 
-            if (comment == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+            try
+            {
+                comment = await GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
 
             return new CommentInfoModel()
             {
@@ -90,6 +103,16 @@ namespace TaskMaster.Core.Services
                     UserId = x.UserId
                 })
                 .ToListAsync();
+        }
+
+        private async Task<Comment> GetByIdAsync(int id) 
+        {
+            var comment = await repository.GetByIdAsync<Comment>(id);
+
+            if (comment == null)
+                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+
+            return comment;
         }
     }
 }
