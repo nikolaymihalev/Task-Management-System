@@ -9,6 +9,11 @@ namespace TaskMaster.Core.Models.Comment
     public class CommentFormModel
     {
         /// <summary>
+        /// Unique identifier for the comment
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// The content or message of the comment
         /// </summary>
         [Required(ErrorMessage = Messages.RequireErrorMessage)]

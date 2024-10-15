@@ -9,6 +9,11 @@ namespace TaskMaster.Core.Models.Notification
     public class NotificationFormModel
     {
         /// <summary>
+        /// Unique identifier for the notification
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// The message or content of the notification
         /// </summary>
         [Required(ErrorMessage = Messages.RequireErrorMessage)]

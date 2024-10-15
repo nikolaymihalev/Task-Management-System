@@ -9,6 +9,11 @@ namespace TaskMaster.Core.Models.Task
     public class TaskFormModel
     {
         /// <summary>
+        /// Unique identifier for the task
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Title or name of the task
         /// </summary>
         [StringLength(Variables.TaskTitleMaxLength, 

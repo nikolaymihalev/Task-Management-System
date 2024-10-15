@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Services;
 using TaskMaster.Infrastructre.Data;
 using TaskMaster.Infrastructure.Common;
 
@@ -9,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services) 
         {
+            services.AddScoped<ITaskService, TaskService>();
             return services;
         }
 
