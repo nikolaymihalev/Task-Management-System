@@ -15,5 +15,6 @@
         public const int NotificationMessageMaxLength = 200;
 
         public const int MaxTasksPerPage = 10;
+        public const int MaxNotificationsPerPage = 5;
     }
 }

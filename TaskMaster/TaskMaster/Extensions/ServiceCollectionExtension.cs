@@ -13,6 +13,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<INotificationService, NotificationService>();
+
             return services;
         }
 
