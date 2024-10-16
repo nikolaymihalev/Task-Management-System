@@ -153,3 +153,17 @@ body {
         border-radius: 0.3em;
         margin-top: 1em;
     }
+
+.privacy-container {
+    margin-top: 2em;
+}
+
+.privacy-container h2{
+    color: #000;
+    margin-bottom: 1em;
+}
+
+.privacy-container ol li {
+    font-size: 1.2rem;
+    margin-bottom: 1em;
+}
