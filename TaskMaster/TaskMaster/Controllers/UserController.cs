@@ -30,7 +30,7 @@ namespace TaskMaster.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -73,7 +73,7 @@ namespace TaskMaster.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
