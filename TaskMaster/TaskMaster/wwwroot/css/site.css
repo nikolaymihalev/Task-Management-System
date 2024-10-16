@@ -94,3 +94,62 @@ body {
     border: none;
     font-weight: bold;
 }
+
+.contact-container{
+    display:flex;
+    margin-top: 2em;
+    gap: 4em;
+}
+
+    .contact-container .contact-info-container{
+        width: 900px;
+    }
+
+.contact-info-container h2{
+    font-size: 2.3rem;
+    margin-bottom: 0.6em;
+    color: #000;
+}
+
+.contact-info-container p {
+    font-size: 1.3rem;
+    margin-bottom: 1.2em;
+}
+
+.contact-info-container ul {
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.9;
+    color: #000;
+}
+
+.contact-form-container form{
+    background: #fff;
+    border-radius: 0.3em; 
+    border: 1px solid gray;
+    padding: 2em;
+    display: flex;
+    flex-wrap: wrap 
+}
+
+    .contact-form-container form input,
+    .contact-form-container form textarea {
+        flex: 1 0 100%;
+        margin-bottom: 1em;
+    }
+
+.contact-form-container form label{
+    color: #000;
+    opacity: 0.9;
+    font-weight: bold;
+}
+
+    .contact-form-container form a {
+        text-decoration: none;
+        color: #fff;
+        background: dodgerblue;
+        padding: 0.5em;
+        font-weight: bold;
+        border-radius: 0.3em;
+        margin-top: 1em;
+    }
