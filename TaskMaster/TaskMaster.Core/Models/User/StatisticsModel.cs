@@ -21,16 +21,6 @@
         public int CompletedTasksCount { get; set; }
 
         /// <summary>
-        /// Tasks completed grouped by categories (e.g., Work, Personal, Urgent).
-        /// </summary>
-        public Dictionary<string, int> TasksByCategory { get; set; } = new Dictionary<string, int>();
-
-        /// <summary>
-        /// Average time taken to complete tasks in minutes.
-        /// </summary>
-        public double AverageTaskCompletionTime { get; set; }
-
-        /// <summary>
         /// Number of tasks completed before the deadline.
         /// </summary>
         public int TasksCompletedBeforeDeadline { get; set; }

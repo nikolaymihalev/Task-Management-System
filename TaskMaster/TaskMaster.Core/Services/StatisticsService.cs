@@ -21,15 +21,46 @@ namespace TaskMaster.Core.Services
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 
-            var totalTasks = tasks.Count();
-            var completedTasks = tasks.Count(t => t.Status == "Completed");
-            var pendingTasks = tasks.Count(t => t.Status != "Completed");
-            var overdueTasks = tasks.Count(t => t.DueTime < DateTime.Now && t.Status != "Completed");
+            int totalTasksCount = tasks.Count();
+            int completedTasksCount = tasks.Count(t => t.Status == "Completed");
+            int pendingTasksCount = tasks.Count(t => t.Status != "Completed");
+            int overdueTasksCount = tasks.Count(t => t.DueTime < DateTime.Now && t.Status != "Completed");
 
-            double completionRate = totalTasks > 0 ? (double)completedTasks / totalTasks * 100 : 0;
+            double completionRate = totalTasksCount > 0 ? (double)completedTasksCount / totalTasksCount * 100 : 0;
 
+            int tasksComBeforeDeadCount = 0;
+            int tasksComAfterDeadCount = 0;
 
-            return null;
+            var completedTasks = tasks.Where(x => x.Status == "Completed");
+
+            foreach(var task in completedTasks)
+            {
+                if (task.CompletedTime <= task.DueTime)
+                    tasksComBeforeDeadCount++;
+                else
+                    tasksComAfterDeadCount++;
+            }
+
+            Dictionary<string, int> tasksByPriority = new Dictionary<string, int>();
+
+            foreach (var task in tasks)
+            {
+                if (tasksByPriority.Keys.Contains(task.Priority))
+                    tasksByPriority[task.Priority]++;
+
+                tasksByPriority[task.Priority] = 0;
+            }
+
+            return new StatisticsModel()
+            {
+                TaskCompletionRate = completionRate,
+                PendingTasksCount = pendingTasksCount,
+                CompletedTasksCount = completedTasksCount,
+                TasksCompletedBeforeDeadline = tasksComBeforeDeadCount,
+                TasksCompletedAfterDeadline = tasksComAfterDeadCount,
+                OverdueTasksCount = overdueTasksCount,
+                TasksByPriority = tasksByPriority
+            };
         }
     }
 }
