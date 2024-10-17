@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TaskMaster.Core.Contracts;
 using TaskMaster.Core.Models.User;
 
 namespace TaskMaster.Controllers
@@ -9,13 +11,16 @@ namespace TaskMaster.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IStatisticsService statisticsService;
 
         public UserController(
             UserManager<IdentityUser> _userManager, 
-            SignInManager<IdentityUser> _signInManager)
+            SignInManager<IdentityUser> _signInManager,
+            IStatisticsService _statisticsService)
         {
             userManager = _userManager;
             signInManager = _signInManager;
+            statisticsService = _statisticsService;
         }
 
         [HttpGet]

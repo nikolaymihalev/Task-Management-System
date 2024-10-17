@@ -21,46 +21,54 @@ namespace TaskMaster.Core.Services
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 
-            int totalTasksCount = tasks.Count();
-            int completedTasksCount = tasks.Count(t => t.Status == "Completed");
-            int pendingTasksCount = tasks.Count(t => t.Status != "Completed");
-            int overdueTasksCount = tasks.Count(t => t.DueTime < DateTime.Now && t.Status != "Completed");
-
-            double completionRate = totalTasksCount > 0 ? (double)completedTasksCount / totalTasksCount * 100 : 0;
-
-            int tasksComBeforeDeadCount = 0;
-            int tasksComAfterDeadCount = 0;
-
-            var completedTasks = tasks.Where(x => x.Status == "Completed");
-
-            foreach(var task in completedTasks)
+            if (tasks.Any()) 
             {
-                if (task.CompletedTime <= task.DueTime)
-                    tasksComBeforeDeadCount++;
-                else
-                    tasksComAfterDeadCount++;
-            }
+                int totalTasksCount = tasks.Count();
+                int completedTasksCount = tasks.Count(t => t.Status == "Completed");
+                int pendingTasksCount = tasks.Count(t => t.Status != "Completed");
+                int overdueTasksCount = tasks.Count(t => t.DueTime < DateTime.Now && t.Status != "Completed");
 
-            Dictionary<string, int> tasksByPriority = new Dictionary<string, int>();
+                double completionRate = totalTasksCount > 0 ? (double)completedTasksCount / totalTasksCount * 100 : 0;
 
-            foreach (var task in tasks)
-            {
-                if (tasksByPriority.Keys.Contains(task.Priority))
+                int tasksComBeforeDeadCount = 0;
+                int tasksComAfterDeadCount = 0;
+
+                var completedTasks = tasks.Where(x => x.Status == "Completed");
+
+                foreach (var task in completedTasks)
+                {
+                    if (task.CompletedTime <= task.DueTime)
+                        tasksComBeforeDeadCount++;
+                    else
+                        tasksComAfterDeadCount++;
+                }
+
+                Dictionary<string, int> tasksByPriority = new Dictionary<string, int>();
+
+                foreach (var task in tasks)
+                {
+                    if (!tasksByPriority.Keys.Contains(task.Priority))
+                        tasksByPriority[task.Priority] = 0;
+                }
+
+                foreach (var task in tasks)
+                {
                     tasksByPriority[task.Priority]++;
+                }
 
-                tasksByPriority[task.Priority] = 0;
+                return new StatisticsModel()
+                {
+                    TaskCompletionRate = completionRate,
+                    PendingTasksCount = pendingTasksCount,
+                    CompletedTasksCount = completedTasksCount,
+                    TasksCompletedBeforeDeadline = tasksComBeforeDeadCount,
+                    TasksCompletedAfterDeadline = tasksComAfterDeadCount,
+                    OverdueTasksCount = overdueTasksCount,
+                    TasksByPriority = tasksByPriority
+                };
             }
 
-            return new StatisticsModel()
-            {
-                TaskCompletionRate = completionRate,
-                PendingTasksCount = pendingTasksCount,
-                CompletedTasksCount = completedTasksCount,
-                TasksCompletedBeforeDeadline = tasksComBeforeDeadCount,
-                TasksCompletedAfterDeadline = tasksComAfterDeadCount,
-                OverdueTasksCount = overdueTasksCount,
-                TasksByPriority = tasksByPriority
-            };
+            return new StatisticsModel();
         }
     }
 }
