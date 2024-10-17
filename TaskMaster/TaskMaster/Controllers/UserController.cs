@@ -24,6 +24,14 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Home()
+        {
+            var model = await statisticsService.GetStatisticsAsync(User.Id());
+
+            return View(model);
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
