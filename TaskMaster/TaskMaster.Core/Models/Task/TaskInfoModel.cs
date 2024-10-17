@@ -26,6 +26,11 @@
         public string DueTime { get; set; } = string.Empty;
 
         /// <summary>
+        /// The time when the task was completed
+        /// </summary>
+        public string CompletedTime { get; set; } = string.Empty;
+
+        /// <summary>
         /// Priority level of the task (Low, Medium, High)
         /// </summary>
         public string Priority { get; set; } = string.Empty;

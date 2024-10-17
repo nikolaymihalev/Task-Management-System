@@ -41,6 +41,12 @@ namespace TaskMaster.Infrastructure.Models
         public DateTime DueTime { get; set; }
 
         /// <summary>
+        /// The time when the task was completed
+        /// </summary>
+        [Comment("The time when the task was completed")]
+        public DateTime CompletedTime { get; set; }
+
+        /// <summary>
         /// Priority level of the task (Low, Medium, High)
         /// </summary>
         [Required]

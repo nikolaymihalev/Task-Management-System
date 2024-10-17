@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
 
             return services;
         }

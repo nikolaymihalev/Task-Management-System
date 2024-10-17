@@ -38,6 +38,11 @@ namespace TaskMaster.Core.Models.Task
         public DateTime DueTime { get; set; }
 
         /// <summary>
+        /// The time when the task was completed
+        /// </summary>
+        public DateTime CompletedTime { get; set; }
+
+        /// <summary>
         /// Priority level of the task (Low, Medium, High)
         /// </summary>
         [Required(ErrorMessage = Messages.RequireErrorMessage)]
