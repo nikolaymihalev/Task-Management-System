@@ -45,5 +45,15 @@
         /// </summary>
         public Dictionary<string, int> TasksByStatus { get; set; } = new Dictionary<string, int>();
 
+        /// <summary>
+        /// Number of tasks completed for the past year.
+        /// </summary>
+        public Dictionary<string, int> TasksCompletedPastYear { get; set; } = new Dictionary<string, int>();
+
+        /// <summary>
+        /// Number of tasks completed for all time.
+        /// </summary>
+        public Dictionary<string, int> TasksCompletedAllTime { get; set; } = new Dictionary<string, int>();
+
     }
 }
