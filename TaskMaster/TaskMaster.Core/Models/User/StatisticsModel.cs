@@ -40,5 +40,10 @@
         /// </summary>
         public Dictionary<string, int> TasksByPriority { get; set; } = new Dictionary<string, int>();
 
+        /// <summary>
+        /// Number of tasks by status (ToDo, InProgress, Completed).
+        /// </summary>
+        public Dictionary<string, int> TasksByStatus { get; set; } = new Dictionary<string, int>();
+
     }
 }

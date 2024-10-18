@@ -45,17 +45,31 @@ namespace TaskMaster.Core.Services
                 }
 
                 Dictionary<string, int> tasksByPriority = new Dictionary<string, int>();
-                var enumNames = Enum.GetNames(typeof(TaskPriority));
+                var enumPriorityNames = Enum.GetNames(typeof(TaskPriority));
 
-                foreach (var enumValue in enumNames)
+                Dictionary<string, int> tasksByStatus = new Dictionary<string, int>();
+                var enumStatusNames = Enum.GetNames(typeof(Enums.TaskStatus));
+
+                foreach (var enumValue in enumPriorityNames)
                 {
                     tasksByPriority[enumValue] = 0;
+                }
+
+                foreach (var enumValue in enumStatusNames)
+                {
+                    tasksByStatus[enumValue] = 0;
                 }
 
                 foreach (var task in tasks)
                 {
                     if(tasksByPriority.Keys.Contains(task.Priority))
                         tasksByPriority[task.Priority]++;
+                }
+
+                foreach (var task in tasks)
+                {
+                    if (tasksByStatus.Keys.Contains(task.Status))
+                        tasksByStatus[task.Status]++;
                 }
 
                 return new StatisticsModel()
@@ -66,7 +80,8 @@ namespace TaskMaster.Core.Services
                     TasksCompletedBeforeDeadline = tasksComBeforeDeadCount,
                     TasksCompletedAfterDeadline = tasksComAfterDeadCount,
                     OverdueTasksCount = overdueTasksCount,
-                    TasksByPriority = tasksByPriority
+                    TasksByPriority = tasksByPriority,
+                    TasksByStatus = tasksByStatus
                 };
             }
 

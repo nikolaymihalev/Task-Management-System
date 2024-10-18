@@ -200,8 +200,9 @@ canvas {
 .dashboard-content{
     display: flex;
     flex-wrap:wrap;
-    gap: 2em;
     text-align: center;
+    justify-content: space-around;
+    margin-bottom: 2em;
 }
 
 .dashboard-content div p{

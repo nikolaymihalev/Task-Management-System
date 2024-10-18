@@ -22,11 +22,17 @@
                 <div>
                     <p>Overdue Tasks</p>
                     <canvas id="overdueTasksChart" width="200" height="200"></canvas>
+                </div>                
+            </div>
+            <div class="dashboard-content">
+                <div>
+                    <p>Tasks by Status</p>
+                    <canvas id="tasksByStatusChart" width="250" height="250"></canvas>
                 </div>
 
                 <div>
                     <p>Tasks by Priority</p>
-                    <canvas id="tasksByPriorityChart" width="200" height="200"></canvas>
+                    <canvas id="tasksByPriorityChart" width="250" height="250"></canvas>
                 </div>
             </div>
         </main>
@@ -83,7 +89,7 @@
         }
     });
 
-    // Tasks by Priority Pie Chart
+    // Tasks by Priority Bar Chart
     var ctx4 = document.getElementById('tasksByPriorityChart').getContext('2d');
     var tasksByPriority = @Html.Raw(Json.Serialize(Model.TasksByPriority));
 
@@ -91,7 +97,7 @@
     var priorityData = Object.values(tasksByPriority);
 
     var tasksByPriorityChart = new Chart(ctx4, {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: priorityLabels,
             datasets: [{
@@ -100,7 +106,36 @@
             }]
         },
         options: {
-            responsive: true,
+            plugins: {
+                legend: {
+                    display: false 
+                }
+            }
+        }
+    });
+
+    // Tasks by Status Bar Chart
+    var ctx5 = document.getElementById('tasksByStatusChart').getContext('2d');
+    var tasksByStatus = @Html.Raw(Json.Serialize(Model.TasksByStatus));
+
+    var statusLabels = Object.keys(tasksByStatus);
+    var statusData = Object.values(tasksByStatus);
+
+    var tasksByStatusChart = new Chart(ctx5, {
+        type: 'bar',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: ['#ffaa00', '#f3ff17', '#07d900']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
         }
     });
 </script>
