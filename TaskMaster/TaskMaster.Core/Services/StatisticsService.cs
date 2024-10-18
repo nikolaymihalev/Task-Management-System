@@ -72,6 +72,36 @@ namespace TaskMaster.Core.Services
                         tasksByStatus[task.Status]++;
                 }
 
+                int yearNow = DateTime.Now.Year;
+                string[] monthsArray = new string[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+                Dictionary<string, int> taskCompletedPastYear = new Dictionary<string, int>();
+                Dictionary<string, int> taskCompletedForAllTime = new Dictionary<string, int>();
+
+                foreach(var month in monthsArray)
+                {
+                    if (!taskCompletedPastYear.Keys.Contains(month))
+                        taskCompletedPastYear[month] = 0;
+
+                    if (!taskCompletedForAllTime.Keys.Contains(month))
+                        taskCompletedForAllTime[month] = 0;
+                }
+
+
+                foreach(var task in completedTasks)
+                {
+                    string currentMonth = monthsArray[task.CompletedTime.Month + 1];
+
+                    if (task.CompletedTime.Year == yearNow)
+                    {
+                        taskCompletedPastYear[currentMonth]++;
+                    }
+                    else
+                    {
+                        taskCompletedForAllTime[currentMonth]++;
+                    }
+                }
+
                 return new StatisticsModel()
                 {
                     TaskCompletionRate = completionRate,
@@ -81,7 +111,9 @@ namespace TaskMaster.Core.Services
                     TasksCompletedAfterDeadline = tasksComAfterDeadCount,
                     OverdueTasksCount = overdueTasksCount,
                     TasksByPriority = tasksByPriority,
-                    TasksByStatus = tasksByStatus
+                    TasksByStatus = tasksByStatus,
+                    TasksCompletedPastYear = taskCompletedPastYear,
+                    TasksCompletedAllTime = taskCompletedForAllTime
                 };
             }
 
