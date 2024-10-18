@@ -24,7 +24,7 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Home()
+        public async Task<IActionResult> Dashboard()
         {
             var model = await statisticsService.GetStatisticsAsync(User.Id());
 

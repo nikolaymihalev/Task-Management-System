@@ -17,7 +17,7 @@ namespace TaskMaster.Controllers
         public IActionResult Index()
         {
             if (User?.Identity?.IsAuthenticated ?? false) 
-                return RedirectToAction("Home", "User");
+                return RedirectToAction("Dashboard", "User");
 
             return View();
         }
