@@ -35,6 +35,18 @@
                     <canvas id="tasksByPriorityChart" width="250" height="250"></canvas>
                 </div>
             </div>
+
+            <div class="dashboard-content">
+                <div>
+                    <p>Tasks completed this year</p>
+                    <canvas id="tasksCompletdThisYear" width="400" height="400"></canvas>
+                </div>
+
+                <div>
+                    <p>Tasks for all time</p>
+                    <canvas id="tasksAllTime" width="400" height="400"></canvas>
+                </div>
+            </div>
         </main>
     </div>
 </div>
@@ -128,6 +140,58 @@
             datasets: [{
                 data: statusData,
                 backgroundColor: ['#ffaa00', '#f3ff17', '#07d900']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Tasks completed this year
+    var ctx6 = document.getElementById('tasksCompletdThisYear').getContext('2d');
+    var tasksCompletedThisYear = @Html.Raw(Json.Serialize(Model.TasksCompletedThisYear));
+
+    var tCTYLabels = Object.keys(tasksCompletedThisYear);
+    var tCTYData = Object.values(tasksCompletedThisYear);
+
+    var tasksCompletedThisChart = new Chart(ctx6, {
+        type: 'line',
+        data: {
+            labels: tCTYLabels,
+            datasets: [{
+                data: tCTYData,
+                backgroundColor: '#1E90FF',
+                borderColor: '#1E90FF'
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Tasks all time
+    var ctx7 = document.getElementById('tasksAllTime').getContext('2d');
+    var tasksForAllTime = @Html.Raw(Json.Serialize(Model.TasksAllTime));
+
+    var tasksAllTimeLabels = Object.keys(tasksForAllTime);
+    var tasksAllTimeData = Object.values(tasksForAllTime);
+
+    var tasksAllTimeChart = new Chart(ctx7, {
+        type: 'line',
+        data: {
+            labels: tasksAllTimeLabels,
+            datasets: [{
+                data: tasksAllTimeData,
+                backgroundColor: '#ff0000',
+                borderColor: '#ff0000'
             }]
         },
         options: {

@@ -48,12 +48,12 @@
         /// <summary>
         /// Number of tasks completed for the past year.
         /// </summary>
-        public Dictionary<string, int> TasksCompletedPastYear { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> TasksCompletedThisYear { get; set; } = new Dictionary<string, int>();
 
         /// <summary>
-        /// Number of tasks completed for all time.
+        /// Number of tasks for all time.
         /// </summary>
-        public Dictionary<string, int> TasksCompletedAllTime { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> TasksAllTime { get; set; } = new Dictionary<string, int>();
 
     }
 }
