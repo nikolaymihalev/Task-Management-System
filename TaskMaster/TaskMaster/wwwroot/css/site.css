@@ -173,7 +173,6 @@ canvas {
     margin-bottom: 1em;
 }
 
-/* Sidebar styles */
 .sidebar {
     height: 100vh;
     position: fixed;
@@ -190,18 +189,19 @@ canvas {
     }
 
         .sidebar .nav-link.active {
-            background-color: #007bff;
+            background-color: dodgerblue;
             color: white;
         }
 
 .main-content {
-    margin-left: 250px; /* Adjust this value according to sidebar width */
+    margin-left: 250px;
 }
 
 .dashboard-content{
     display: flex;
     flex-wrap:wrap;
     gap: 2em;
+    text-align: center;
 }
 
 .dashboard-content div p{

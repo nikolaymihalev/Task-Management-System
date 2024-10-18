@@ -2,23 +2,28 @@
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link active" asp-action="Dashboard" asp-controller="User">
                     <i class="bi bi-house-door"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <i class="bi bi-bar-chart-line"></i> Statistics
+                    <i class="bi bi-bar-chart-line"></i> My Tasks
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <i class="bi bi-list-task"></i> Tasks
+                    <i class="bi bi-list-task"></i> New Task
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <i class="bi bi-person"></i> Profile
+                    <i class="bi bi-person"></i> Notifications
+                </a>
+            </li>
+            <li class="nav-item" style="margin-top: 2em;">
+                <a class="nav-link" asp-action="Logout" asp-controller="User">
+                    <i class="bi bi-person"></i> Logout
                 </a>
             </li>
         </ul>
