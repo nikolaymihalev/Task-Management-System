@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Enums;
 using TaskMaster.Core.Models.User;
 using TaskMaster.Infrastructure.Common;
 using Task = TaskMaster.Infrastructure.Models.Task;
@@ -44,16 +45,17 @@ namespace TaskMaster.Core.Services
                 }
 
                 Dictionary<string, int> tasksByPriority = new Dictionary<string, int>();
+                var enumNames = Enum.GetNames(typeof(TaskPriority));
 
-                foreach (var task in tasks)
+                foreach (var enumValue in enumNames)
                 {
-                    if (!tasksByPriority.Keys.Contains(task.Priority))
-                        tasksByPriority[task.Priority] = 0;
+                    tasksByPriority[enumValue] = 0;
                 }
 
                 foreach (var task in tasks)
                 {
-                    tasksByPriority[task.Priority]++;
+                    if(tasksByPriority.Keys.Contains(task.Priority))
+                        tasksByPriority[task.Priority]++;
                 }
 
                 return new StatisticsModel()

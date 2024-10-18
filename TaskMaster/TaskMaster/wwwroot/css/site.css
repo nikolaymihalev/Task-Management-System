@@ -197,3 +197,13 @@ canvas {
 .main-content {
     margin-left: 250px; /* Adjust this value according to sidebar width */
 }
+
+.dashboard-content{
+    display: flex;
+    flex-wrap:wrap;
+    gap: 2em;
+}
+
+.dashboard-content div p{
+    font-size: 1.2rem;
+}

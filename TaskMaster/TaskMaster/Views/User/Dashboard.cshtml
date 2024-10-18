@@ -2,59 +2,31 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <i class="bi bi-house-door"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-bar-chart-line"></i> Statistics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-list-task"></i> Tasks
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-person"></i> Profile
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <partial name="_SidebarMenuPartial"/>
 
-        <!-- Content Section -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Dashboard</h1>
             </div>
-            <div class="content">
-                <!-- Your page content here -->
+            <div class="dashboard-content">
                 <div>
-                    <h3>Task Completion Breakdown</h3>
-                    <canvas id="taskCompletionChart" width="400" height="400"></canvas>
+                    <p>Task Completion Breakdown</p>
+                    <canvas id="taskCompletionChart" width="200" height="200"></canvas>
                 </div>
 
                 <div>
-                    <h3>Task Deadline Completion</h3>
-                    <canvas id="taskDeadlineChart" width="400" height="400"></canvas>
+                    <p>Task Deadline Completion</p>
+                    <canvas id="taskDeadlineChart" width="200" height="200"></canvas>
                 </div>
 
                 <div>
-                    <h3>Overdue Tasks</h3>
-                    <canvas id="overdueTasksChart" width="400" height="400"></canvas>
+                    <p>Overdue Tasks</p>
+                    <canvas id="overdueTasksChart" width="200" height="200"></canvas>
                 </div>
 
                 <div>
-                    <h3>Tasks by Priority</h3>
-                    <canvas id="tasksByPriorityChart" width="400" height="400"></canvas>
+                    <p>Tasks by Priority</p>
+                    <canvas id="tasksByPriorityChart" width="200" height="200"></canvas>
                 </div>
             </div>
         </main>
@@ -62,18 +34,16 @@
 </div>
 
 <script>
-    // Serialize the model data into JavaScript
     var stats = @Html.Raw(Json.Serialize(Model));
 
-    // Task Completion Breakdown Chart
     var ctx1 = document.getElementById('taskCompletionChart').getContext('2d');
     var taskCompletionChart = new Chart(ctx1, {
         type: 'pie',
         data: {
             labels: ['Completed Tasks', 'Pending Tasks'],
             datasets: [{
-                data: [stats.CompletedTasksCount, stats.PendingTasksCount],
-                backgroundColor: ['#36A2EB', '#FF6384']
+                data: [stats.completedTasksCount, stats.pendingTasksCount],
+                backgroundColor: ['#07d900', '#ff0000']
             }]
         },
         options: {
@@ -81,15 +51,15 @@
         }
     });
 
-    // Task Deadline Completion (Before vs After)
+    // Task Deadline Completion
     var ctx2 = document.getElementById('taskDeadlineChart').getContext('2d');
     var taskDeadlineChart = new Chart(ctx2, {
         type: 'pie',
         data: {
             labels: ['Completed Before Deadline', 'Completed After Deadline'],
             datasets: [{
-                data: [stats.TasksCompletedBeforeDeadline, stats.TasksCompletedAfterDeadline],
-                backgroundColor: ['#4BC0C0', '#FFCE56']
+                data: [stats.tasksCompletedBeforeDeadline, stats.tasksCompletedAfterDeadline],
+                backgroundColor: ['#1E90FF', '#f3ff17']
             }]
         },
         options: {
@@ -104,8 +74,8 @@
         data: {
             labels: ['Overdue Tasks', 'Completed Tasks'],
             datasets: [{
-                data: [stats.OverdueTasksCount, stats.CompletedTasksCount],
-                backgroundColor: ['#FF9F40', '#36A2EB']
+                data: [stats.overdueTasksCount, stats.completedTasksCount],
+                backgroundColor: ['#ffaa00', '#07d900']
             }]
         },
         options: {
@@ -115,8 +85,10 @@
 
     // Tasks by Priority Pie Chart
     var ctx4 = document.getElementById('tasksByPriorityChart').getContext('2d');
-    var priorityLabels = Object.keys(stats.TasksByPriority); // Extract priority levels (High, Medium, Low)
-    var priorityData = Object.values(stats.TasksByPriority); // Extract corresponding counts
+    var tasksByPriority = @Html.Raw(Json.Serialize(Model.TasksByPriority));
+
+    var priorityLabels = Object.keys(tasksByPriority);
+    var priorityData = Object.values(tasksByPriority);
 
     var tasksByPriorityChart = new Chart(ctx4, {
         type: 'pie',
@@ -124,7 +96,7 @@
             labels: priorityLabels,
             datasets: [{
                 data: priorityData,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'] // Colors for high, medium, and low
+                backgroundColor: ['#07d900', '#1E90FF', '#ff0000']
             }]
         },
         options: {
