@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function changeSidebarActiveButton(index) {
+    const sidebarLinkEls = document.querySelectorAll('#sidebarMenu a');
 
-// Write your JavaScript code.
+    for (el of sidebarLinkEls) {
+        el.classList.remove('active');
+    }
+
+    sidebarLinkEls[index].classList.add('active');
+}

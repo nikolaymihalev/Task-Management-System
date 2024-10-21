@@ -50,7 +50,11 @@
     </div>
 </div>
 
+<script src="~/js/site.js"></script>
+
 <script>
+    changeSidebarActiveButton(0);
+
     var stats = @Html.Raw(Json.Serialize(Model));
 
     var ctx1 = document.getElementById('taskCompletionChart').getContext('2d');
