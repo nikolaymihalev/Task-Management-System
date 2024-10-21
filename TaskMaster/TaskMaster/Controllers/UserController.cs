@@ -12,21 +12,32 @@ namespace TaskMaster.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IStatisticsService statisticsService;
+        private readonly ITaskService taskService;
 
         public UserController(
             UserManager<IdentityUser> _userManager, 
             SignInManager<IdentityUser> _signInManager,
-            IStatisticsService _statisticsService)
+            IStatisticsService _statisticsService,
+            ITaskService _taskService)
         {
             userManager = _userManager;
             signInManager = _signInManager;
             statisticsService = _statisticsService;
+            taskService = _taskService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
             var model = await statisticsService.GetStatisticsAsync(User.Id());
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyTasks()
+        {
+            var model = await taskService.GetTasksForPageAsync(User.Id());
 
             return View(model);
         }
