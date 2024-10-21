@@ -6,7 +6,31 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">My Tasks</h1>
             </div>
-            
+            @{
+                if(Model.Tasks.Any())
+                {
+                    <div class="tasks-container">
+                        @foreach (var task in Model.Tasks)
+                        {
+                            string containerBackColor = "";
+
+                            switch (task.Status)
+                            {
+                                case "ToDo": containerBackColor = "#ffaa00"; break;
+                                case "InProgress": containerBackColor = "#f3ff17"; break;
+                                case "Completed": containerBackColor = "#07d900"; break;
+                            }
+                            <div class="task-content-container" style="background: @containerBackColor">
+                                <partial name="_TaskContentPartial" model="@task"/>
+                            </div>
+                        }
+                    </div>                    
+                }
+                else
+                {
+                    <p>No Tasks!</p>
+                }
+            }
         </main>
     </div>
 </div>

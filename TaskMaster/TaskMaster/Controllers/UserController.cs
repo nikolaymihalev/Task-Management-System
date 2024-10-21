@@ -35,9 +35,9 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyTasks()
+        public async Task<IActionResult> MyTasks(int currentPage = 1)
         {
-            var model = await taskService.GetTasksForPageAsync(User.Id());
+            var model = await taskService.GetTasksForPageAsync(User.Id(), currentPage);
 
             return View(model);
         }
