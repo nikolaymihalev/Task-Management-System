@@ -1,0 +1,59 @@
+﻿@model TaskPageModel
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 2em;">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">My Tasks</h1>
+            </div>
+            
+        </main>
+    </div>
+</div>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                @{
+                    int previousPage = Model.CurrentPage - 1;
+                }
+                <a class="page-link"
+                   asp-controller="User"
+                   asp-action="MyTasks"
+                   asp-route-currentPage="@previousPage"
+                   >Previous</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.PagesCount; i++)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="User"
+                   asp-action="MyTasks"
+                   asp-route-currentPage="@i">
+                    @i
+                </a>
+            </li>
+        }
+        @if (Model.CurrentPage < Model.PagesCount)
+        {
+            <li class="page-item">
+                @{
+                    int nextPage = Model.CurrentPage + 1;
+                }
+                <a class="page-link"
+                   asp-controller="User"
+                   asp-action="MyTasks"
+                   asp-route-currentPage="@nextPage">
+                    Next
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
