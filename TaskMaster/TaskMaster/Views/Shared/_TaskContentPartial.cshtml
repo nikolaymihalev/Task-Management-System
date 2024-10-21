@@ -1,11 +1,9 @@
 ﻿@model TaskInfoModel
 
 <a asp-action="Task" asp-controller="User" asp-route-id="@Model.Id">
-    <div class="task-title">
-        <h5>@Model.Title</h5>
-        <p>@Model.Priority</p>
-    </div>
-    <p>@Model.Description</p>
+    <p class="task-priority">@Model.Priority</p>
+    <h5>@Model.Title</h5>
+    <p class="task-description">@Model.Description</p>
     <div class="task-time-status">
         <p>@Model.Status</p>
         <p>@Model.DueTime</p>

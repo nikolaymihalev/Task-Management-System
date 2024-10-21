@@ -208,3 +208,43 @@ canvas {
 .dashboard-content div p{
     font-size: 1.2rem;
 }
+
+.tasks-container{
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
+    margin-bottom: 3em;
+}
+
+.task-content-container{
+    width: 300px;
+    height: 250px;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+.task-content-container a{
+    text-decoration: none;
+    color: #000;
+}
+    .task-content-container .task-description {
+        opacity: 0.9;
+    }
+
+    .task-content-container .task-description,
+    .task-content-container h5 {        
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .task-content-container .task-time-status{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6em;
+    }
+
+    .task-content-container .task-time-status {
+        font-weight: bold;
+    }
