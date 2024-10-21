@@ -9,3 +9,20 @@
         <p>@Model.DueTime</p>
     </div>
 </a>
+
+<script>
+    var priorityEls = document.querySelectorAll('.task-priority');
+
+    for (el of priorityEls) {
+        if (el.textContent === 'Low') {
+            el.style.backgroundColor = '#61ff6b'
+            el.style.color = "#07d900";
+        }else if (el.textContent === 'Medium') {
+            el.style.backgroundColor = '#7ad1ff'
+            el.style.color = "#1E90FF";
+        }else {
+            el.style.backgroundColor = '#ff8a97'
+            el.style.color = "#ff0000";
+        }
+    }
+</script>

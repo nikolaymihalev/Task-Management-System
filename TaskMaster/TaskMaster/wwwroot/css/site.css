@@ -248,3 +248,11 @@ canvas {
     .task-content-container .task-time-status {
         font-weight: bold;
     }
+
+    .task-content-container .task-priority{
+        display: inline-block;
+        padding: 0.3em 1em;
+        border-radius: 0.5em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
