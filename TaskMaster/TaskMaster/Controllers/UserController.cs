@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -15,17 +14,20 @@ namespace TaskMaster.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly IStatisticsService statisticsService;
         private readonly ITaskService taskService;
+        private readonly INotificationService notificationService;
 
         public UserController(
             UserManager<IdentityUser> _userManager, 
             SignInManager<IdentityUser> _signInManager,
             IStatisticsService _statisticsService,
-            ITaskService _taskService)
+            ITaskService _taskService,
+            INotificationService _notificationService)
         {
             userManager = _userManager;
             signInManager = _signInManager;
             statisticsService = _statisticsService;
             taskService = _taskService;
+            notificationService = _notificationService;
         }
 
         [HttpGet]
@@ -49,6 +51,7 @@ namespace TaskMaster.Controllers
         {
             var model = new TaskFormModel();
             model.DueTime = DateTime.Now;
+
             return View(model);
         }
 
@@ -71,6 +74,14 @@ namespace TaskMaster.Controllers
             }
 
             return RedirectToAction(nameof(MyTasks));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Notifications(int currentPage = 1)
+        {
+            var model = await notificationService.GetNotificationsForPageAsync(User.Id(), currentPage);
+
+            return View();
         }
 
         [HttpGet]
