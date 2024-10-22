@@ -257,14 +257,12 @@ canvas {
         margin-bottom: 0.5em;
     }
 
-.task-form-container{
-    width: 800px;
-    margin: 0 auto;
-    border: 1px solid #000;
-    padding: 2em;
-    border-radius: 1em;
-}
+    .task-form-container form {
+        border: 1px solid #000;
+        padding: 2em;
+        border-radius: 1em;
+    }
 
-.task-form-container form div{
-    margin-bottom: 2em;
-}
+    .task-form-container form div {
+        margin-bottom: 2em;
+    }

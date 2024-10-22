@@ -48,6 +48,7 @@ namespace TaskMaster.Controllers
         public IActionResult NewTask()
         {
             var model = new TaskFormModel();
+            model.DueTime = DateTime.Now;
             return View(model);
         }
 
