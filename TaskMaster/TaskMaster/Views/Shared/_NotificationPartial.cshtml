@@ -1,0 +1,9 @@
+﻿@model NotificationInfoModel
+
+<div class="notification-info-container">
+    <div class="not-mess-date">
+        <h4>@Model.Message</h4>
+        <p>Sent: @Model.DateSent</p>
+    </div>    
+    <a asp-action="RemoveNotification" asp-controller="User" asp-route-notId="@Model.Id"><i class="fa-solid fa-trash-can" style="color: #fff;"></i></a>
+</div>

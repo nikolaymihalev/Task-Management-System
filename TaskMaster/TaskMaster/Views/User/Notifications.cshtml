@@ -1,34 +1,26 @@
-﻿@model TaskPageModel
+﻿@model NotificationPageModel
 
 <div class="container-fluid">
     <div class="row">
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 2em;">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1>My Tasks</h1>
+                <h1>Notifications</h1>
             </div>
             @{
-                if(Model.Tasks.Any())
+                if (Model.Notifications.Any())
                 {
-                    <div class="tasks-container">
-                        @foreach (var task in Model.Tasks)
-                        {
-                            string containerBackColor = "";
-
-                            switch (task.Status)
+                    <div class="notification-container">
+                        @{
+                            foreach(var notification in Model.Notifications)
                             {
-                                case "ToDo": containerBackColor = "#ffc163"; break;
-                                case "InProgress": containerBackColor = "#fff173"; break;
-                                case "Completed": containerBackColor = "#a1ffa4"; break;
+                                <partial name="_NotificationPartial" model="@notification"/>
                             }
-                            <div class="task-content-container" style="background: @containerBackColor">
-                                <partial name="_TaskContentPartial" model="@task"/>
-                            </div>
                         }
-                    </div>                    
+                    </div>
                 }
                 else
                 {
-                    <p>No Tasks!</p>
+                    <p>No Notifications!</p>
                 }
             }
         </main>
@@ -45,9 +37,8 @@
                 }
                 <a class="page-link"
                    asp-controller="User"
-                   asp-action="MyTasks"
-                   asp-route-currentPage="@previousPage"
-                   >Previous</a>
+                   asp-action="Notifications"
+                   asp-route-currentPage="@previousPage">Previous</a>
             </li>
         }
         @for (int i = 1; i <= Model.PagesCount; i++)
@@ -55,7 +46,7 @@
             <li class="page-item">
                 <a class="page-link"
                    asp-controller="User"
-                   asp-action="MyTasks"
+                   asp-action="Notifications"
                    asp-route-currentPage="@i">
                     @i
                 </a>
@@ -69,7 +60,7 @@
                 }
                 <a class="page-link"
                    asp-controller="User"
-                   asp-action="MyTasks"
+                   asp-action="Notifications"
                    asp-route-currentPage="@nextPage">
                     Next
                 </a>
@@ -82,6 +73,6 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/site.js"></script>
     <script>
-        changeSidebarActiveButton(1);
+        changeSidebarActiveButton(3);
     </script>
 }

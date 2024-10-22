@@ -81,7 +81,7 @@ namespace TaskMaster.Controllers
         {
             var model = await notificationService.GetNotificationsForPageAsync(User.Id(), currentPage);
 
-            return View();
+            return View(model);
         }
 
         [HttpGet]
