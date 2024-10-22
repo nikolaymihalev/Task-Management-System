@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Models.User;
 
@@ -66,7 +67,15 @@ namespace TaskMaster.Controllers
                 model.UserId = User.Id();
                 model.Status = 0;
 
+                var notModel = new NotificationFormModel() 
+                {
+                    Message = "Added new task!",
+                    DateSent = DateTime.Now,
+                    UserId = User.Id(),
+                };
+
                 await taskService.AddAsync(model);
+                await notificationService.AddAsync(notModel);
             }
             catch (Exception)
             {
