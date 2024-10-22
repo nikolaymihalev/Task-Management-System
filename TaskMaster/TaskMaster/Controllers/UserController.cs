@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Models.User;
 
 namespace TaskMaster.Controllers
@@ -40,6 +42,31 @@ namespace TaskMaster.Controllers
             var model = await taskService.GetTasksForPageAsync(User.Id(), currentPage);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult NewTask()
+        {
+            var model = new TaskFormModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewTask(TaskFormModel model)
+        {
+            if(!ModelState.IsValid)
+                return View(model);
+
+            try
+            {
+                await taskService.AddAsync(model);
+            }
+            catch (Exception)
+            {
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(MyTasks));
         }
 
         [HttpGet]
