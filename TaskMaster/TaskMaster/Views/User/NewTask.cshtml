@@ -1,0 +1,41 @@
+﻿@model TaskFormModel
+
+<div class="task-form-container">
+    <form asp-action="NewTask" asp-controller="User" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="@Model.Id" />
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control">
+            <span asp-validation-for="Title" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control">
+            <span asp-validation-for="Description" class="small text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DueTime" class="control-label"></label>
+            <input asp-for="DueTime" class="form-control" type="date" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Priority"></label>
+            <select asp-for="Priority" class="form-control">
+                @{
+                    var priorities = (TaskPriority[])Enum.GetValues(typeof(TaskPriority));
+                    foreach(var priority in priorities)
+                    {
+                        <option value="@((int)priority)">@priority.ToString()</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Priority" class="small text-danger"></span>
+        </div>
+        <div class="text-center">
+            <input class="btn btn-primary mt-3" type="submit" value="Create" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

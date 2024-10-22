@@ -59,6 +59,9 @@ namespace TaskMaster.Controllers
 
             try
             {
+                model.UserId = User.Id();
+                model.Status = 0;
+
                 await taskService.AddAsync(model);
             }
             catch (Exception)
