@@ -31,6 +31,7 @@ namespace TaskMaster.Core.Services
                     Status = x.Status.ToString(),
                     UserId = userId
                 })
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
 
