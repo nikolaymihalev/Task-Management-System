@@ -11,12 +11,56 @@
                     <p>Status: <span>@Model.Status</span></p>
                     <p>Priority: <span>@Model.Priority</span></p>
                 </div>
-                @Model.Description
+                <p>@Model.Description</p>
                 <div class="task-dates-container">
                     <p>Due Date: @Model.DueTime</p>
                     <p>Completed: @Model.CompletedTime</p>
+                </div>
+                <div class="task-buttons">
+                    <a class="update-btn" asp-action="Update" asp-controller="User" asp-route-id="@Model.Id">Update</a>
+                    <a class="delete-btn" asp-action="Remove" asp-controller="User" asp-route-id="@Model.Id">Remove</a>
                 </div>
             </div>            
         </main>
     </div>
 </div>
+
+<script>
+    var taskStatusPriorityEl = document.querySelector('.task-st-pr-container').childNodes;
+
+    taskStatusPriorityEl.forEach((node) => {
+        if (node.firstChild !== null) {
+            if (node.firstChild.textContent === 'Status:') {
+                switch (node.firstElementChild.textContent) {
+                    case 'ToDo':
+                        node.firstElementChild.style.backgroundColor = '#ffc163'
+                        node.firstElementChild.style.color = "#ff9b03";
+                        break;
+                    case 'InProgress':
+                        node.firstElementChild.style.backgroundColor = '#fff173'
+                        node.firstElementChild.style.color = "#ffe817";
+                        break;
+                    case 'Completed':
+                        node.firstElementChild.style.backgroundColor = '#a1ffa4'
+                        node.firstElementChild.style.color = "##21ff28";
+                        break;
+                }
+            } else if (node.firstChild.textContent === 'Priority:') {
+                switch (node.firstElementChild.textContent) {
+                    case 'Low': 
+                        node.firstElementChild.style.backgroundColor = '#61ff6b'
+                        node.firstElementChild.style.color = "#07d900"; 
+                        break;
+                    case 'Medium': 
+                        node.firstElementChild.style.backgroundColor = '#7ad1ff'
+                        node.firstElementChild.style.color = "#1E90FF";
+                        break;
+                    case 'High':
+                        node.firstElementChild.style.backgroundColor = '#ff8a97'
+                        node.firstElementChild.style.color = "#ff0000";
+                        break;
+                }
+            }
+        }
+    })
+</script> 
