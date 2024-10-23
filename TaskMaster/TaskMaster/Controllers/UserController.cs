@@ -114,6 +114,34 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Remove(int id)
+        {
+            try
+            {
+                var model = await taskService.GetTaskByIdAsync(id);
+                if (model.UserId == User.Id()) 
+                {
+                    await taskService.DeleteAsync(id);
+                }
+
+                return RedirectToAction(nameof(MyTasks));
+            }
+            catch (Exception)
+            {
+                var notModel = new NotificationFormModel()
+                {
+                    Message = Messages.OperationFailedErrorMessage,
+                    DateSent = DateTime.Now,
+                    UserId = User.Id()
+                };
+
+                await notificationService.AddAsync(notModel);
+
+                return RedirectToAction(nameof(Notifications));
+            }
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
