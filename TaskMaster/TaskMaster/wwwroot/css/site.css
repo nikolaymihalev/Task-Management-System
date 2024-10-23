@@ -288,3 +288,12 @@ canvas {
     padding: 1em 1.3em;
     font-size: 1.1rem;
 }
+
+.task-st-pr-container {
+    display: flex;
+    gap: 3em;
+}
+
+.task-st-pr-container span{
+    display: inline-block;
+}

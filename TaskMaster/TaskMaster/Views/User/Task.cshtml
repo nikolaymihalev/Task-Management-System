@@ -30,11 +30,11 @@
 
     taskStatusPriorityEl.forEach((node) => {
         if (node.firstChild !== null) {
-            if (node.firstChild.textContent === 'Status:') {
+            if (node.firstChild.textContent === 'Status: ') {                
                 switch (node.firstElementChild.textContent) {
                     case 'ToDo':
                         node.firstElementChild.style.backgroundColor = '#ffc163'
-                        node.firstElementChild.style.color = "#ff9b03";
+                        node.firstElementChild.style.color = "#ff9b03";                        
                         break;
                     case 'InProgress':
                         node.firstElementChild.style.backgroundColor = '#fff173'
@@ -45,7 +45,7 @@
                         node.firstElementChild.style.color = "##21ff28";
                         break;
                 }
-            } else if (node.firstChild.textContent === 'Priority:') {
+            } else if (node.firstChild.textContent === 'Priority: ') {
                 switch (node.firstElementChild.textContent) {
                     case 'Low': 
                         node.firstElementChild.style.backgroundColor = '#61ff6b'
