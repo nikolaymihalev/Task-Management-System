@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TaskMaster.Core.Constants;
 using TaskMaster.Core.Contracts;
 using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Models.Task;
@@ -91,6 +92,25 @@ namespace TaskMaster.Controllers
             var model = await notificationService.GetNotificationsForPageAsync(User.Id(), currentPage);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Task(int id)
+        {
+            try
+            {
+                var model = await taskService.GetTaskByIdAsync(id);
+
+                if (model.UserId != User.Id())
+                    throw new ArgumentException(Messages.InvalidModelErrorMessage);
+
+                return View(model);
+
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(MyTasks));
+            }
         }
 
         [HttpGet]
