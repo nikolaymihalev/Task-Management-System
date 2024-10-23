@@ -292,8 +292,45 @@ canvas {
 .task-st-pr-container {
     display: flex;
     gap: 3em;
+    font-weight: bold;
 }
 
 .task-st-pr-container span{
     display: inline-block;
+    padding: 0.3em 0.5em;
+    border-radius: 0.3em;
+    margin-left: 0.4em;
+}
+
+.task-infomodel-desc {
+    font-size: 1.1rem;
+}
+
+.task-dates-container {
+    margin-top: 2em;
+    font-weight: bold;
+}
+
+.task-buttons{
+    display: flex;
+    margin-top: 2em;
+}
+
+    .task-buttons a {
+        display: inline-block;
+        flex: 1 1 49%;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 0.3em;
+        padding: 0.7em 0;
+    }
+
+.update-btn {
+    background: #007bff;
+    color: #fff;
+}
+
+.delete-btn {
+    background: red;
+    color: #fff;
 }
