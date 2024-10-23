@@ -56,7 +56,8 @@ namespace TaskMaster.Core.Services
                 DueTime = model.DueTime.ToString("dd/MM/yyyy"),
                 Priority = model.Priority.ToString(),
                 Status = model.Status.ToString(),
-                UserId = model.UserId
+                UserId = model.UserId,
+                CompletedTime = model.CompletedTime.Year < 2000 ? "-" : model.CompletedTime.ToString("dd/MM/yyyy")
             };
         }
 

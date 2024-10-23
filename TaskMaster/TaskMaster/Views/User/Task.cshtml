@@ -1,0 +1,22 @@
+﻿@model TaskInfoModel
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 2em;">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1>@Model.Title</h1>
+            </div>
+            <div class="task-infomodel-container">
+                <div class="task-st-pr-container">
+                    <p>Status: <span>@Model.Status</span></p>
+                    <p>Priority: <span>@Model.Priority</span></p>
+                </div>
+                @Model.Description
+                <div class="task-dates-container">
+                    <p>Due Date: @Model.DueTime</p>
+                    <p>Completed: @Model.CompletedTime</p>
+                </div>
+            </div>            
+        </main>
+    </div>
+</div>
