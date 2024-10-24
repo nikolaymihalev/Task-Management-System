@@ -122,6 +122,15 @@ namespace TaskMaster.Controllers
                 if (model.UserId == User.Id()) 
                 {
                     await taskService.DeleteAsync(id);
+
+                    var notSuccModel = new NotificationFormModel()
+                    {
+                        Message = "Successfully removed task!",
+                        DateSent = DateTime.Now,
+                        UserId = User.Id()
+                    };
+
+                    await notificationService.AddAsync(notSuccModel);
                 }
 
                 return RedirectToAction(nameof(MyTasks));
