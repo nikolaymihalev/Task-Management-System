@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TaskMaster.Core.Constants;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Enums;
 using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Models.User;
@@ -172,6 +173,38 @@ namespace TaskMaster.Controllers
             }
 
             return RedirectToAction(nameof(Notifications));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            TaskInfoModel? task;
+
+            try
+            {
+                task = await taskService.GetTaskByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(MyTasks));
+            }
+
+            if (task.UserId != User.Id())
+                return Unauthorized();
+
+            var model = new TaskFormModel()
+            {
+                Id = id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = (int)(Enum.Parse(typeof(Core.Enums.TaskStatus), task.Status)),
+                Priority = (int)(Enum.Parse(typeof(TaskPriority), task.Priority)),
+                UserId = User.Id(),
+                DueTime = DateTime.Parse(task.DueTime),
+                CompletedTime = DateTime.Parse(task.CompletedTime)
+            };
+
+            return View(model);
         }
 
         [HttpGet]
