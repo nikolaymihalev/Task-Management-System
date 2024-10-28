@@ -25,42 +25,49 @@
     </div>
 </div>
 
-<script>
-    var taskStatusPriorityEl = document.querySelector('.task-st-pr-container').childNodes;
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js"></script>
+    <script>
+        changeSidebarActiveButton(1);
+    </script>
+    <script>
+        var taskStatusPriorityEl = document.querySelector('.task-st-pr-container').childNodes;
 
-    taskStatusPriorityEl.forEach((node) => {
-        if (node.firstChild !== null) {
-            if (node.firstChild.textContent === 'Status: ') {                
-                switch (node.firstElementChild.textContent) {
-                    case 'ToDo':
-                        node.firstElementChild.style.backgroundColor = '#ffc163'
-                        node.firstElementChild.style.color = "#ff9b03";                        
-                        break;
-                    case 'InProgress':
-                        node.firstElementChild.style.backgroundColor = '#fff48f'
-                        node.firstElementChild.style.color = "#ffe600";
-                        break;
-                    case 'Completed':
-                        node.firstElementChild.style.backgroundColor = '#a1ffa4'
-                        node.firstElementChild.style.color = "#21ff28";
-                        break;
-                }
-            } else if (node.firstChild.textContent === 'Priority: ') {
-                switch (node.firstElementChild.textContent) {
-                    case 'Low': 
-                        node.firstElementChild.style.backgroundColor = '#61ff6b'
-                        node.firstElementChild.style.color = "#07d900"; 
-                        break;
-                    case 'Medium': 
-                        node.firstElementChild.style.backgroundColor = '#7ad1ff'
-                        node.firstElementChild.style.color = "#1E90FF";
-                        break;
-                    case 'High':
-                        node.firstElementChild.style.backgroundColor = '#ff8a97'
-                        node.firstElementChild.style.color = "#ff0000";
-                        break;
+        taskStatusPriorityEl.forEach((node) => {
+            if (node.firstChild !== null) {
+                if (node.firstChild.textContent === 'Status: ') {
+                    switch (node.firstElementChild.textContent) {
+                        case 'ToDo':
+                            node.firstElementChild.style.backgroundColor = '#ffc163'
+                            node.firstElementChild.style.color = "#ff9b03";
+                            break;
+                        case 'InProgress':
+                            node.firstElementChild.style.backgroundColor = '#fff48f'
+                            node.firstElementChild.style.color = "#ffe600";
+                            break;
+                        case 'Completed':
+                            node.firstElementChild.style.backgroundColor = '#a1ffa4'
+                            node.firstElementChild.style.color = "#21ff28";
+                            break;
+                    }
+                } else if (node.firstChild.textContent === 'Priority: ') {
+                    switch (node.firstElementChild.textContent) {
+                        case 'Low':
+                            node.firstElementChild.style.backgroundColor = '#61ff6b'
+                            node.firstElementChild.style.color = "#07d900";
+                            break;
+                        case 'Medium':
+                            node.firstElementChild.style.backgroundColor = '#7ad1ff'
+                            node.firstElementChild.style.color = "#1E90FF";
+                            break;
+                        case 'High':
+                            node.firstElementChild.style.backgroundColor = '#ff8a97'
+                            node.firstElementChild.style.color = "#ff0000";
+                            break;
+                    }
                 }
             }
-        }
-    })
-</script> 
+        })
+    </script>
+}
