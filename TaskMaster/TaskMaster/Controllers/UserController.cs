@@ -159,6 +159,15 @@ namespace TaskMaster.Controllers
             }
             catch (Exception)
             {
+                var notModel = new NotificationFormModel()
+                {
+                    Message = Messages.OperationFailedErrorMessage,
+                    DateSent = DateTime.Now,
+                    UserId = User.Id()
+                };
+
+                await notificationService.AddAsync(notModel);
+
                 return RedirectToAction(nameof(Notifications));
             }
 
