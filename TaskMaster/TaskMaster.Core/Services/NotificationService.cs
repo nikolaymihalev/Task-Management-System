@@ -49,6 +49,7 @@ namespace TaskMaster.Core.Services
             }
 
             await repository.DeleteAsync<Notification>(id);
+            await repository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<NotificationInfoModel>> GetAllNotificationsAsync(string userId)
