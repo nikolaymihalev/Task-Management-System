@@ -151,6 +151,21 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> RemoveNotification(int notId)
+        {
+            try
+            {
+                await notificationService.DeleteAsync(notId);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(Notifications));
+            }
+
+            return RedirectToAction(nameof(Notifications));
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
