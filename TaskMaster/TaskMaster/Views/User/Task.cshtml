@@ -17,7 +17,7 @@
                     <p>Completed: @Model.CompletedTime</p>
                 </div>
                 <div class="task-buttons">
-                    <a class="update-btn" asp-action="Update" asp-controller="User" asp-route-id="@Model.Id">Update</a>
+                    <a class="update-btn" asp-action="Edit" asp-controller="User" asp-route-id="@Model.Id">Edit</a>
                     <a class="delete-btn" asp-action="Remove" asp-controller="User" asp-route-id="@Model.Id">Remove</a>
                 </div>
             </div>            

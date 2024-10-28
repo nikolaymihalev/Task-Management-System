@@ -176,7 +176,7 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             TaskInfoModel? task;
 
@@ -200,15 +200,14 @@ namespace TaskMaster.Controllers
                 Status = (int)(Enum.Parse(typeof(Core.Enums.TaskStatus), task.Status)),
                 Priority = (int)(Enum.Parse(typeof(TaskPriority), task.Priority)),
                 UserId = User.Id(),
-                DueTime = DateTime.Parse(task.DueTime),
-                CompletedTime = DateTime.Parse(task.CompletedTime)
+                DueTime = DateTime.Parse(task.DueTime)
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(TaskFormModel model, int id)
+        public async Task<IActionResult> Edit(TaskFormModel model, int id)
         {
             TaskInfoModel? task;
 
