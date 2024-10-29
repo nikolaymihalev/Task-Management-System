@@ -234,6 +234,37 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            TaskInfoModel? task;
+
+            try
+            {
+                task = await taskService.GetTaskByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(MyTasks));
+            }
+
+            if (task.UserId != User.Id())
+                return Unauthorized();
+
+            var model = new TaskFormModel()
+            {
+                Id = id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = (int)(Enum.Parse(typeof(Core.Enums.TaskStatus), task.Status)),
+                Priority = (int)(Enum.Parse(typeof(TaskPriority), task.Priority)),
+                UserId = User.Id(),
+                DueTime = DateTime.Parse(task.DueTime)
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
