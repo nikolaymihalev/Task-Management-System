@@ -1,0 +1,53 @@
+﻿@model TaskFormModel
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 2em;">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1>Update Task</h1>
+            </div>
+            <div class="task-form-container">
+                <form asp-action="Update" asp-controller="User" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="@Model.Id" />
+                    <div class="form-group">
+                        <label asp-for="Status"></label>
+                        <select asp-for="Status" class="form-control">
+                            @{
+                                var statuses = Enum.GetNames(typeof(TaskMaster.Core.Enums.TaskStatus));
+                                foreach (var status in statuses)
+                                {
+                                    <option value="@Array.IndexOf(statuses, status)">@status</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Status" class="small text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Priority"></label>
+                        <select asp-for="Priority" class="form-control">
+                            @{
+                                var priorities = Enum.GetNames(typeof(TaskPriority));
+                                foreach(var priority in priorities)
+                                {
+                                    <option value="@Array.IndexOf(priorities, priority)">@priority</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Priority" class="small text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <input class="btn btn-primary mt-3" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/site.js"></script>
+    <script>
+        changeSidebarActiveButton(1);
+    </script>
+}
