@@ -334,3 +334,14 @@ canvas {
     background: red;
     color: #fff;
 }
+
+.task-st-pr-parent{
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-st-pr-update {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+}

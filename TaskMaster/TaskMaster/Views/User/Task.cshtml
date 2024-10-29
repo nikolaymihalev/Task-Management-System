@@ -7,10 +7,15 @@
                 <h1>@Model.Title</h1>
             </div>
             <div class="task-infomodel-container">
-                <div class="task-st-pr-container">
-                    <p>Status: <span>@Model.Status</span></p>
-                    <p>Priority: <span>@Model.Priority</span></p>
-                </div>
+                <div class="task-st-pr-parent">
+                    <div class="task-st-pr-container">
+                        <p>Status: <span>@Model.Status</span></p>
+                        <p>Priority: <span>@Model.Priority</span></p>
+                    </div>
+                    <div>
+                        <a class="task-st-pr-update" asp-action="Update" asp-controller="User" asp-route-id="@Model.Id"><i class="fa-solid fa-pen" style="color: #000000;"></i></a>
+                    </div>
+                </div>                
                 <p class="task-infomodel-desc">@Model.Description</p>
                 <div class="task-dates-container">
                     <p>Due Date: @Model.DueTime</p>
