@@ -260,6 +260,30 @@ namespace TaskMaster.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Update(TaskFormModel model, int id)
+        {
+            TaskInfoModel? task;
+
+            try
+            {
+                task = await taskService.GetTaskByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(MyTasks));
+            }
+
+            if (task.UserId != User.Id())
+                return Unauthorized();
+
+            model.UserId = User.Id();
+
+            await taskService.UpdateAsync(model);
+
+            return RedirectToAction(nameof(MyTasks));
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
