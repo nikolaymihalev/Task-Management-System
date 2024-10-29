@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMaster.Core", "TaskMast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMaster.UnitTests", "TaskMaster.UnitTests\TaskMaster.UnitTests.csproj", "{C0AEEFF3-C959-4225-9193-6A4AB6861162}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMaster.IntegrationTests", "TaskMaster.IntegrationTests\TaskMaster.IntegrationTests.csproj", "{1819A588-F5EB-4D7D-BFF9-75063A98B96A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C0AEEFF3-C959-4225-9193-6A4AB6861162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0AEEFF3-C959-4225-9193-6A4AB6861162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0AEEFF3-C959-4225-9193-6A4AB6861162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1819A588-F5EB-4D7D-BFF9-75063A98B96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1819A588-F5EB-4D7D-BFF9-75063A98B96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1819A588-F5EB-4D7D-BFF9-75063A98B96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1819A588-F5EB-4D7D-BFF9-75063A98B96A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
