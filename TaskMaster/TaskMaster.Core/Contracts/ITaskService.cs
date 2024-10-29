@@ -31,8 +31,14 @@ namespace TaskMaster.Core.Contracts
         /// <summary>
         /// Edits an existing task based on the provided task details
         /// </summary>
-        /// <param name="model">A TaskFormModel containing the updated details of the task</param>
+        /// <param name="model">A TaskFormModel containing the edited details of the task</param>
         Task EditAsync(TaskFormModel model);
+
+        /// <summary>
+        /// Updates an existing task based on the task status and task priority
+        /// </summary>
+        /// <param name="model">A TaskFormModel containing the updated details of the task</param>
+        Task UpdateAsync(TaskFormModel model);
 
         /// <summary>
         /// Retrieves the details of a specific task by its ID

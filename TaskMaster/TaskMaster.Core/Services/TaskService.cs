@@ -115,8 +115,6 @@ namespace TaskMaster.Core.Services
                 task.Title = model.Title;
                 task.Description = model.Description;
                 task.DueTime = model.DueTime;
-                task.Priority = ((TaskPriority)model.Priority).ToString();
-                task.Status = ((TaskStatus)model.Status).ToString();
             }
             catch (Exception)
             {
@@ -148,6 +146,27 @@ namespace TaskMaster.Core.Services
                 throw new ArgumentException(Messages.DoesntExistErrorMessage);
 
             return task;
+        }
+
+        public async Task UpdateAsync(TaskFormModel model)
+        {
+            try
+            {
+                var task = await GetByIdAsync(model.Id);
+
+                task.Priority = ((TaskPriority)model.Priority).ToString();
+                task.Status = ((TaskStatus)model.Status).ToString();
+                if(model.Status == (int)TaskStatus.Completed)
+                {
+                    task.CompletedTime = DateTime.Now;
+                }
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(Messages.OperationFailedErrorMessage);
+            }
+
+            await repository.SaveChangesAsync();
         }
     }
 }
