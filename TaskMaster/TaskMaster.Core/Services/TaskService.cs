@@ -138,16 +138,6 @@ namespace TaskMaster.Core.Services
             await repository.DeleteAsync<Infrastructure.Models.Task>(id);
         }
 
-        private async Task<Infrastructure.Models.Task> GetByIdAsync(int id)
-        {
-            var task = await repository.GetByIdAsync<Infrastructure.Models.Task>(id);
-
-            if (task == null)
-                throw new ArgumentException(Messages.DoesntExistErrorMessage);
-
-            return task;
-        }
-
         public async Task UpdateAsync(TaskFormModel model)
         {
             try
@@ -167,6 +157,16 @@ namespace TaskMaster.Core.Services
             }
 
             await repository.SaveChangesAsync();
+        }
+
+        private async Task<Infrastructure.Models.Task> GetByIdAsync(int id)
+        {
+            var task = await repository.GetByIdAsync<Infrastructure.Models.Task>(id);
+
+            if (task == null)
+                throw new ArgumentException(Messages.DoesntExistErrorMessage);
+
+            return task;
         }
     }
 }
