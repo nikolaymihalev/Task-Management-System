@@ -2,3 +2,8 @@ global using NUnit.Framework;
 global using Microsoft.EntityFrameworkCore;
 global using TaskMaster.Infrastructre.Data;
 global using TaskMaster.Infrastructure.Common;
+global using Microsoft.IdentityModel.Tokens;
+global using TaskMaster.Core.Constants;
+global using TaskMaster.Core.Contracts;
+global using TaskMaster.Core.Models.Task;
+global using TaskMaster.Core.Services;

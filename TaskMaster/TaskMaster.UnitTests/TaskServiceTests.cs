@@ -1,11 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using TaskMaster.Core.Constants;
-using TaskMaster.Core.Contracts;
-using TaskMaster.Core.Models.Task;
-using TaskMaster.Core.Services;
-
-namespace TaskMaster.UnitTests
+﻿namespace TaskMaster.UnitTests
 {
     [TestFixture]
     public class TaskServiceTests
@@ -197,7 +190,7 @@ namespace TaskMaster.UnitTests
 
             var taskForEdit = new TaskFormModel()
             {
-                Id = 2,
+                Id = task2.Id,
                 Title = exTitle,
                 Description = exDescription,
                 DueTime = exDueTime
@@ -205,7 +198,7 @@ namespace TaskMaster.UnitTests
 
             await taskService.EditAsync(taskForEdit);
 
-            var actualTask = await taskService.GetTaskByIdAsync(2);
+            var actualTask = await taskService.GetTaskByIdAsync(task2.Id);
 
             Assert.IsNotNull(actualTask);
             Assert.IsTrue(exTitle == actualTask.Title);
@@ -219,6 +212,63 @@ namespace TaskMaster.UnitTests
             string exException = Messages.OperationFailedErrorMessage;
 
             var exception = Assert.ThrowsAsync<ArgumentException>(async () => await taskService.EditAsync(null));
+
+            Assert.IsTrue(exException == exception.Message);
+        }
+
+        [Test]
+        public async Task Test_DeleteAsyncShouldDeleteModel()
+        {
+            int exCount = 1;
+
+            await taskService.DeleteAsync(task2.Id);
+            await repository.SaveChangesAsync();
+
+            var tasks = await taskService.GetAllTasksAsync(userId);
+
+            Assert.IsTrue(exCount == tasks.Count());
+        }
+
+        [Test]
+        public void Test_DeleteAsyncShouldThrowException()
+        {
+            string exException = Messages.OperationFailedErrorMessage;
+
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await taskService.DeleteAsync(50));
+
+            Assert.IsTrue(exException == exception.Message);
+        }
+
+        [Test]
+        public async Task Test_UpdateAsyncShouldUpdateModel()
+        {
+            string exPriority = "Low";
+            string exStatus = "InProgress";
+
+            var taskForUpdate = new TaskFormModel()
+            {
+                Id = task.Id,
+                Priority = 0,
+                Status = 1,
+            };
+
+            await taskService.UpdateAsync(taskForUpdate);
+
+            var actualTask = await taskService.GetTaskByIdAsync(task.Id);
+
+            Assert.IsNotNull(actualTask);
+            Assert.IsTrue(exPriority == actualTask.Priority);
+            Assert.IsTrue(exStatus == actualTask.Status);
+        }
+
+        [Test]
+        public void Test_UpdateAsyncShouldThrowException()
+        {
+            string exException = Messages.OperationFailedErrorMessage;
+
+            var invalidTask = new TaskFormModel() { Id = 50 }; 
+
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await taskService.UpdateAsync(invalidTask));
 
             Assert.IsTrue(exException == exception.Message);
         }
