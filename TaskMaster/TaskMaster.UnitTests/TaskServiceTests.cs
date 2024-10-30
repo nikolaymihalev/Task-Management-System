@@ -111,6 +111,36 @@ namespace TaskMaster.UnitTests
             Assert.IsTrue(exException == exception.Message);
         }
 
+        [Test]
+        public async Task Test_GetTasksForPageShouldReturnList()
+        {
+            int exCurrentPage = 1;
+            int exPagesCount = 1;
+            int exListCount = 2;
+
+            var taskPageModel = await taskService.GetTasksForPageAsync(userId);
+
+            Assert.IsTrue(exCurrentPage == taskPageModel.CurrentPage);
+            Assert.IsTrue(exPagesCount == taskPageModel.PagesCount);
+            Assert.IsTrue(exListCount == taskPageModel.Tasks.Count());
+            Assert.False(taskPageModel.Tasks.IsNullOrEmpty());
+        }
+
+        [Test]
+        public async Task Test_GetTasksForPageShouldReturnNull()
+        {
+            int exCurrentPage = 2;
+            int exPagesCount = 1;
+            int exListCount = 0;
+
+            var taskPageModel = await taskService.GetTasksForPageAsync(userId, 2);
+
+            Assert.IsTrue(exCurrentPage == taskPageModel.CurrentPage);
+            Assert.IsTrue(exPagesCount == taskPageModel.PagesCount);
+            Assert.IsTrue(exListCount == taskPageModel.Tasks.Count());
+            Assert.True(taskPageModel.Tasks.IsNullOrEmpty());
+        }
+
         [TearDown]
         public void TearDown()
         {
