@@ -72,10 +72,5 @@ namespace TaskMaster.Infrastructure.Models
         /// </summary>
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
-
-        /// <summary>
-        /// Collection of comments assigned to the task
-        /// </summary>
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

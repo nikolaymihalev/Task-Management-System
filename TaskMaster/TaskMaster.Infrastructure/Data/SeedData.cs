@@ -12,7 +12,6 @@ namespace TaskMaster.Infrastructure.Data
             SeedUsers();
             SeedUsersToRoles();
             SeedTasks();
-            SeedComments();
             SeedNotifications();
         }
 
@@ -24,7 +23,6 @@ namespace TaskMaster.Infrastructure.Data
         public IdentityUserRole<string> JohnToUserRole { get; set; } = null!;
         public Task Task { get; set; } = null!;
         public Notification Notification { get; set; } = null!;
-        public Comment Comment { get; set; } = null!;
 
         private void SeedRoles() 
         {
@@ -95,18 +93,6 @@ namespace TaskMaster.Infrastructure.Data
                 Priority = "Medium",
                 Status = "ToDo",
                 UserId = John.Id,
-            };
-        }
-
-        private void SeedComments() 
-        {
-            Comment = new Comment()
-            {
-                Id = 1,
-                Content = "Add custom font.",
-                DateSent = new DateTime(2024, 10, 15),
-                TaskId = Task.Id,
-                UserId = John.Id
             };
         }
 

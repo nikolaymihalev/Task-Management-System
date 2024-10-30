@@ -12,8 +12,6 @@ namespace TaskMaster.Infrastructre.Data
 
         public DbSet<Notification> Notifications { get; set; }
 
-        public DbSet<Comment> Comments { get; set; }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -25,7 +23,6 @@ namespace TaskMaster.Infrastructre.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new UserToRoleConfiguration());
             builder.ApplyConfiguration(new TaskConfiguration());
-            builder.ApplyConfiguration(new CommentConfiguration());
             builder.ApplyConfiguration(new NotificationConfiguration());
 
             base.OnModelCreating(builder);
