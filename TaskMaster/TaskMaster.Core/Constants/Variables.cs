@@ -8,9 +8,6 @@
         public const int TaskDescriptionMinLength = 10;
         public const int TaskDescriptionMaxLength = 500;
 
-        public const int CommentContentMinLength = 3;
-        public const int CommentContentMaxLength = 300;
-
         public const int NotificationMessageMinLength = 5;
         public const int NotificationMessageMaxLength = 200;
 
