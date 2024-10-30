@@ -1,6 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using TaskMaster.Core.Constants;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Services;
 
 namespace TaskMaster.UnitTests
@@ -139,6 +141,86 @@ namespace TaskMaster.UnitTests
             Assert.IsTrue(exPagesCount == taskPageModel.PagesCount);
             Assert.IsTrue(exListCount == taskPageModel.Tasks.Count());
             Assert.True(taskPageModel.Tasks.IsNullOrEmpty());
+        }
+
+        [Test]
+        public async Task Test_AddAsyncShouldAddModel()
+        {
+            int exTasksCount = 3;
+            string exTitle = "Test Title 3";
+            string exDescription = "Test Description 3";
+            string exDueTime = "14.10.2023";
+            string exPriority = "Low";
+            string exStatus = "InProgress";
+            string exCompletedTime = "-";
+
+            var taskForAdd = new TaskFormModel()
+            {
+                Id = 3,
+                Title = "Test Title 3",
+                Description = "Test Description 3",
+                DueTime = new DateTime(2023, 10, 14),
+                Priority = 0,
+                Status = 1,
+                UserId = userId
+            };
+
+            await taskService.AddAsync(taskForAdd);
+
+            var allTasks = await taskService.GetAllTasksAsync(userId);
+            var addedTask = await taskService.GetTaskByIdAsync(taskForAdd.Id);
+
+            Assert.IsTrue(exTasksCount == allTasks.Count());
+            Assert.IsNotNull(addedTask);
+            Assert.IsTrue(exTitle == addedTask.Title);
+            Assert.IsTrue(exDescription == addedTask.Description);
+            Assert.IsTrue(exDueTime == addedTask.DueTime);
+            Assert.IsTrue(exPriority == addedTask.Priority);
+            Assert.IsTrue(exStatus == addedTask.Status); 
+            Assert.IsTrue(exCompletedTime == addedTask.CompletedTime);
+        }
+
+        [Test]
+        public void Test_AddAsyncShouldThrowException()
+        {
+            var exception = Assert.ThrowsAsync<NullReferenceException>(async () => await taskService.AddAsync(null));
+
+            Assert.IsNotNull(exception.Message);
+        }
+
+        [Test]
+        public async Task Test_EditAsyncShouldEditModel()
+        {
+            string exTitle = "Test Title 5";
+            string exDescription = "Test Description 5";
+            DateTime exDueTime = new DateTime(2024, 11, 14);
+
+            var taskForEdit = new TaskFormModel()
+            {
+                Id = 2,
+                Title = exTitle,
+                Description = exDescription,
+                DueTime = exDueTime
+            };
+
+            await taskService.EditAsync(taskForEdit);
+
+            var actualTask = await taskService.GetTaskByIdAsync(2);
+
+            Assert.IsNotNull(actualTask);
+            Assert.IsTrue(exTitle == actualTask.Title);
+            Assert.IsTrue(exDescription == actualTask.Description);
+            Assert.IsTrue(exDueTime == DateTime.Parse(actualTask.DueTime));
+        }
+
+        [Test]
+        public void Test_EditAsyncShouldThrowException()
+        {
+            string exException = Messages.OperationFailedErrorMessage;
+
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await taskService.EditAsync(null));
+
+            Assert.IsTrue(exException == exception.Message);
         }
 
         [TearDown]
