@@ -109,6 +109,58 @@ namespace TaskMaster.UnitTests
             Assert.IsTrue(exException == exception.Message);
         }
 
+        [Test]
+        public async Task Test_GetAllNotificationsAsyncShouldReturnList()
+        {
+            int exListCount = 2;
+
+            var list = await notificationService.GetAllNotificationsAsync(userId);
+
+            Assert.IsTrue(exListCount == list.Count());
+        }
+
+        [Test]
+        public async Task Test_GetAllNotificationsAsyncShouldReturnEmptyList()
+        {
+            int exListCount = 0;
+
+            var list = await notificationService.GetAllNotificationsAsync(" ");
+
+            Assert.IsTrue(exListCount == list.Count());
+            Assert.True(list.IsNullOrEmpty());
+            Assert.True(list.SequenceEqual(list.OrderByDescending(x => x.Id)));
+        }
+
+        [Test]
+        public async Task Test_GetNotificationsForPageShouldReturnList()
+        {
+            int exCurrentPage = 1;
+            int exPagesCount = 1;
+            int exListCount = 2;
+
+            var notificationPageModel = await notificationService.GetNotificationsForPageAsync(userId);
+
+            Assert.IsTrue(exCurrentPage == notificationPageModel.CurrentPage);
+            Assert.IsTrue(exPagesCount == notificationPageModel.PagesCount);
+            Assert.IsTrue(exListCount == notificationPageModel.Notifications.Count());
+            Assert.False(notificationPageModel.Notifications.IsNullOrEmpty());
+        }
+
+        [Test]
+        public async Task Test_GetNotificationsForPageShouldReturnNull()
+        {
+            int exCurrentPage = 2;
+            int exPagesCount = 1;
+            int exListCount = 0;
+
+            var notificationPageModel = await notificationService.GetNotificationsForPageAsync(userId, 2);
+
+            Assert.IsTrue(exCurrentPage == notificationPageModel.CurrentPage);
+            Assert.IsTrue(exPagesCount == notificationPageModel.PagesCount);
+            Assert.IsTrue(exListCount == notificationPageModel.Notifications.Count());
+            Assert.True(notificationPageModel.Notifications.IsNullOrEmpty());
+        }
+
         [TearDown]
         public void TearDown()
         {

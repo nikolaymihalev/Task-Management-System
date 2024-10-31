@@ -63,6 +63,7 @@ namespace TaskMaster.Core.Services
                     DateSent = x.DateSent.ToString("dd/MM/yyyy"),
                     UserId = userId
                 })
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
 
