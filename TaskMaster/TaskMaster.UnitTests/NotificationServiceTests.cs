@@ -161,6 +161,30 @@ namespace TaskMaster.UnitTests
             Assert.True(notificationPageModel.Notifications.IsNullOrEmpty());
         }
 
+        [Test]
+        public async Task Test_GetNotificationByIdAsyncShouldReturnModel()
+        {
+            string exMessage = "Test Message 2";
+            string exSentTime = "12.11.2024";
+
+            var actualNotification = await notificationService.GetNotificationByIdAsync(not2.Id);
+
+            Assert.IsNotNull(actualNotification);
+            Assert.IsTrue(exMessage == actualNotification.Message);
+            Assert.IsTrue(exSentTime == actualNotification.DateSent);
+            Assert.IsTrue(userId == actualNotification.UserId);
+        }
+
+        [Test]
+        public void Test_GetNotificationByIdAsyncShouldThrowException()
+        {
+            string exException = Messages.OperationFailedErrorMessage;
+
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await notificationService.GetNotificationByIdAsync(50));
+
+            Assert.IsTrue(exException == exception.Message);
+        }
+
         [TearDown]
         public void TearDown()
         {
