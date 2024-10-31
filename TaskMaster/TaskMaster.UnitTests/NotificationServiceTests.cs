@@ -117,6 +117,7 @@ namespace TaskMaster.UnitTests
             var list = await notificationService.GetAllNotificationsAsync(userId);
 
             Assert.IsTrue(exListCount == list.Count());
+            Assert.True(list.SequenceEqual(list.OrderByDescending(x => x.Id)));
         }
 
         [Test]
@@ -128,7 +129,6 @@ namespace TaskMaster.UnitTests
 
             Assert.IsTrue(exListCount == list.Count());
             Assert.True(list.IsNullOrEmpty());
-            Assert.True(list.SequenceEqual(list.OrderByDescending(x => x.Id)));
         }
 
         [Test]
