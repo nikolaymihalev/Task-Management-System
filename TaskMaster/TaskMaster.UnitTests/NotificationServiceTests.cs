@@ -1,4 +1,5 @@
-﻿using TaskMaster.Core.Contracts;
+﻿using System.Threading.Tasks;
+using TaskMaster.Core.Contracts;
 using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Services;
 using TaskMaster.Infrastructure.Models;
@@ -83,6 +84,29 @@ namespace TaskMaster.UnitTests
             var exception = Assert.ThrowsAsync<NullReferenceException>(async () => await notificationService.AddAsync(null));
 
             Assert.IsNotNull(exception.Message);
+        }
+
+        [Test]
+        public async Task Test_DeleteAsyncShouldDeleteModel()
+        {
+            int exCount = 1;
+
+            await notificationService.DeleteAsync(not2.Id);
+            await repository.SaveChangesAsync();
+
+            var notifications = await notificationService.GetAllNotificationsAsync(userId);
+
+            Assert.IsTrue(exCount == notifications.Count());
+        }
+
+        [Test]
+        public void Test_DeleteAsyncShouldThrowException()
+        {
+            string exException = Messages.OperationFailedErrorMessage;
+
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await notificationService.DeleteAsync(50));
+
+            Assert.IsTrue(exException == exception.Message);
         }
 
         [TearDown]
