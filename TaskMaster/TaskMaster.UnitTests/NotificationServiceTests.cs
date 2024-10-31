@@ -1,4 +1,8 @@
-﻿using TaskMaster.Infrastructure.Models;
+﻿using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Models.Notification;
+using TaskMaster.Core.Services;
+using TaskMaster.Infrastructure.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace TaskMaster.UnitTests
 {
@@ -45,6 +49,40 @@ namespace TaskMaster.UnitTests
             this.repository.SaveChangesAsync();
 
             notificationService = new NotificationService(this.repository);
+        }
+
+        [Test]
+        public async Task Test_AddAsyncShouldAddModel()
+        {
+            int exNotificationsCount = 3;
+            string exMessage = "Test Message 3";
+            string exSentTime = "30.10.2024";
+
+            var notification = new NotificationFormModel()
+            {
+                Id = 3,
+                Message = "Test Message 3",
+                DateSent = new DateTime(2024, 10, 30),
+                UserId = userId,
+            };
+
+            await notificationService.AddAsync(notification);
+
+            var allNotifications = await notificationService.GetAllNotificationsAsync(userId);
+            var addedNotification = await notificationService.GetNotificationByIdAsync(notification.Id);
+
+            Assert.IsTrue(exNotificationsCount == allNotifications.Count());
+            Assert.IsNotNull(addedNotification);
+            Assert.IsTrue(exMessage == addedNotification.Message);
+            Assert.IsTrue(exSentTime == addedNotification.DateSent);
+        }
+
+        [Test]
+        public void Test_AddAsyncShouldThrowException()
+        {
+            var exception = Assert.ThrowsAsync<NullReferenceException>(async () => await notificationService.AddAsync(null));
+
+            Assert.IsNotNull(exception.Message);
         }
 
         [TearDown]
