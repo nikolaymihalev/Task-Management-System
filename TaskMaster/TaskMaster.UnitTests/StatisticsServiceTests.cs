@@ -149,6 +149,47 @@
             CollectionAssert.AreEquivalent(exTasksByPriorities, statistics.TasksByPriority);
         }
 
+        [Test]
+        public async Task Test_GetStatisticsShouldReturnTrueTasksByMonths()
+        {
+            Dictionary<string, int> exTasksCompletedThisYear = new Dictionary<string, int>()
+            {
+                { "January", 0 } ,
+                {"February", 0 } ,
+                {"March", 0 } ,
+                {"April", 0 },
+                {"May", 1 },
+                {"June", 0 },
+                {"July", 0 },
+                {"August", 1 },
+                {"September", 0 },
+                {"October", 0 },
+                {"November", 0 },
+                {"December", 0 }
+            };
+
+            Dictionary<string, int> exTasksAllTime = new Dictionary<string, int>()
+            {
+                { "January", 2 } ,
+                {"February", 0 } ,
+                {"March", 0 } ,
+                {"April", 0 },
+                {"May", 1 },
+                {"June", 0 },
+                {"July", 0 },
+                {"August", 1 },
+                {"September", 0 },
+                {"October", 0 },
+                {"November", 0 },
+                {"December", 0 }
+            };
+
+            var statistics = await statisticsService.GetStatisticsAsync(userId);
+
+            CollectionAssert.AreEquivalent(exTasksCompletedThisYear, statistics.TasksCompletedThisYear);
+            CollectionAssert.AreEquivalent(exTasksAllTime, statistics.TasksAllTime);
+        }
+
         [TearDown]
         public void TearDown() 
         {
