@@ -1,4 +1,6 @@
-﻿namespace TaskMaster.UnitTests
+﻿using TaskMaster.Core.Services;
+
+namespace TaskMaster.UnitTests
 {
     [TestFixture]
     public class StatisticsServiceTests
@@ -15,7 +17,68 @@
         [SetUp]
         public void SetUp() 
         {
+            task = new TaskMaster.Infrastructure.Models.Task()
+            {
+                Id = 1,
+                Title = "Test Title",
+                Description = "Test Description",
+                DueTime = new DateTime(2024, 12, 13),
+                Priority = "Medium",
+                Status = "ToDo",
+                UserId = userId
+            };
 
+            task2 = new TaskMaster.Infrastructure.Models.Task()
+            {
+                Id = 2,
+                Title = "Test Title 2",
+                Description = "Test Description 2",
+                DueTime = new DateTime(2024, 10, 14),
+                Priority = "Low",
+                Status = "Completed",
+                CompletedTime = new DateTime(2024, 5, 2),
+                UserId = userId
+            };
+
+            task3 = new TaskMaster.Infrastructure.Models.Task()
+            {
+                Id = 3,
+                Title = "Test Title 3",
+                Description = "Test Description 3",
+                DueTime = new DateTime(2024, 5, 18),
+                Priority = "High",
+                Status = "Completed",
+                CompletedTime = new DateTime(2024, 8, 20),
+                UserId = userId
+            };
+
+            task4 = new TaskMaster.Infrastructure.Models.Task()
+            {
+                Id = 4,
+                Title = "Test Title 4",
+                Description = "Test Description 4",
+                DueTime = new DateTime(2024, 6, 25),
+                Priority = "High",
+                Status = "InProgress",
+                UserId = userId
+            };
+
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TaskMasterDb")
+                .Options;
+
+            this.context = new ApplicationDbContext(options);
+
+            this.repository = new Repository(this.context);
+
+            this.repository.AddAsync(task);
+            this.repository.AddAsync(task2);
+            this.repository.AddAsync(task3);
+            this.repository.AddAsync(task4);
+
+            this.repository.SaveChangesAsync();
+
+            statisticsService = new StatisticsService(this.repository);
         }
 
         [TearDown]
