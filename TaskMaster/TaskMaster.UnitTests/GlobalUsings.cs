@@ -7,3 +7,4 @@ global using TaskMaster.Core.Constants;
 global using TaskMaster.Core.Contracts;
 global using TaskMaster.Core.Models.Task;
 global using TaskMaster.Core.Services;
+global using TaskMaster.Core.Enums;

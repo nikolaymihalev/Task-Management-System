@@ -56,7 +56,7 @@
                 Title = "Test Title 4",
                 Description = "Test Description 4",
                 DueTime = new DateTime(2024, 6, 25),
-                Priority = "High",
+                Priority = "Low",
                 Status = "InProgress",
                 UserId = userId
             };
@@ -124,6 +124,29 @@
             Assert.IsTrue(exPendingTasksCount == statistics.PendingTasksCount);
             Assert.IsTrue(exCompletedTasksCount == statistics.CompletedTasksCount);
             Assert.IsTrue(exOverdueTasksCount == statistics.OverdueTasksCount);
+        }
+
+        [Test]
+        public async Task Test_GetStatisticsShouldReturnTrueTasksByPriorityAndStatus()
+        {
+            Dictionary<string, int> exTasksByStatuses = new Dictionary<string, int>()
+            {
+                { "ToDo" , 1},
+                { "InProgress" , 1},
+                { "Completed" , 2},
+            };
+
+            Dictionary<string, int> exTasksByPriorities = new Dictionary<string, int>()
+            {
+                { "Low" , 2},
+                { "Medium" , 1},
+                { "High" , 1},
+            };
+
+            var statistics = await statisticsService.GetStatisticsAsync(userId);
+
+            CollectionAssert.AreEquivalent(exTasksByStatuses, statistics.TasksByStatus);
+            CollectionAssert.AreEquivalent(exTasksByPriorities, statistics.TasksByPriority);
         }
 
         [TearDown]
