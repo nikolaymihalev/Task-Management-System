@@ -110,6 +110,22 @@
             Assert.IsTrue(exTasksCompletedBeforeDeadline == statistics.TasksCompletedBeforeDeadline);
         }
 
+        [Test]
+        public async Task Test_GetStatisticsShouldReturnTrueInformationAboutTasks()
+        {
+            double exTaskCompletionRate = 50;
+            int exPendingTasksCount = 2;
+            int exCompletedTasksCount = 2;
+            int exOverdueTasksCount = 1;
+
+            var statistics = await statisticsService.GetStatisticsAsync(userId);
+
+            Assert.IsTrue(exTaskCompletionRate == statistics.TaskCompletionRate);
+            Assert.IsTrue(exPendingTasksCount == statistics.PendingTasksCount);
+            Assert.IsTrue(exCompletedTasksCount == statistics.CompletedTasksCount);
+            Assert.IsTrue(exOverdueTasksCount == statistics.OverdueTasksCount);
+        }
+
         [TearDown]
         public void TearDown() 
         {
