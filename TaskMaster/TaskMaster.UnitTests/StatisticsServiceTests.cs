@@ -1,6 +1,4 @@
-﻿using TaskMaster.Core.Services;
-
-namespace TaskMaster.UnitTests
+﻿namespace TaskMaster.UnitTests
 {
     [TestFixture]
     public class StatisticsServiceTests
@@ -79,6 +77,25 @@ namespace TaskMaster.UnitTests
             this.repository.SaveChangesAsync();
 
             statisticsService = new StatisticsService(this.repository);
+        }
+
+        [Test]
+        public async Task Test_GetStatisticsShouldReturnEmptyModel() 
+        {
+            int exCount = 0;
+
+            var model = await statisticsService.GetStatisticsAsync(" ");
+
+            Assert.IsTrue(exCount == model.TaskCompletionRate);
+            Assert.IsTrue(exCount == model.PendingTasksCount);
+            Assert.IsTrue(exCount == model.CompletedTasksCount);
+            Assert.IsTrue(exCount == model.TasksCompletedBeforeDeadline);
+            Assert.IsTrue(exCount == model.TasksCompletedAfterDeadline);
+            Assert.IsTrue(exCount == model.OverdueTasksCount);
+            Assert.IsEmpty(model.TasksByPriority);
+            Assert.IsEmpty(model.TasksByStatus);
+            Assert.IsEmpty(model.TasksCompletedThisYear);
+            Assert.IsEmpty(model.TasksAllTime);
         }
 
         [TearDown]
