@@ -84,18 +84,30 @@
         {
             int exCount = 0;
 
-            var model = await statisticsService.GetStatisticsAsync(" ");
+            var statistics = await statisticsService.GetStatisticsAsync(" ");
 
-            Assert.IsTrue(exCount == model.TaskCompletionRate);
-            Assert.IsTrue(exCount == model.PendingTasksCount);
-            Assert.IsTrue(exCount == model.CompletedTasksCount);
-            Assert.IsTrue(exCount == model.TasksCompletedBeforeDeadline);
-            Assert.IsTrue(exCount == model.TasksCompletedAfterDeadline);
-            Assert.IsTrue(exCount == model.OverdueTasksCount);
-            Assert.IsEmpty(model.TasksByPriority);
-            Assert.IsEmpty(model.TasksByStatus);
-            Assert.IsEmpty(model.TasksCompletedThisYear);
-            Assert.IsEmpty(model.TasksAllTime);
+            Assert.IsTrue(exCount == statistics.TaskCompletionRate);
+            Assert.IsTrue(exCount == statistics.PendingTasksCount);
+            Assert.IsTrue(exCount == statistics.CompletedTasksCount);
+            Assert.IsTrue(exCount == statistics.TasksCompletedBeforeDeadline);
+            Assert.IsTrue(exCount == statistics.TasksCompletedAfterDeadline);
+            Assert.IsTrue(exCount == statistics.OverdueTasksCount);
+            Assert.IsEmpty(statistics.TasksByPriority);
+            Assert.IsEmpty(statistics.TasksByStatus);
+            Assert.IsEmpty(statistics.TasksCompletedThisYear);
+            Assert.IsEmpty(statistics.TasksAllTime);
+        }
+
+        [Test]
+        public async Task Test_GetStatisticsShouldReturnCompletedTasksAfterAndBeforeDeadline()
+        {
+            int exTasksCompletedBeforeDeadline = 1;
+            int exTasksCompletedAfterDeadline = 1;
+
+            var statistics = await statisticsService.GetStatisticsAsync(userId);
+
+            Assert.IsTrue(exTasksCompletedAfterDeadline == statistics.TasksCompletedAfterDeadline);
+            Assert.IsTrue(exTasksCompletedBeforeDeadline == statistics.TasksCompletedBeforeDeadline);
         }
 
         [TearDown]
