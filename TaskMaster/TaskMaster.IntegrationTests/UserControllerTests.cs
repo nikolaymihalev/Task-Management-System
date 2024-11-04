@@ -238,6 +238,63 @@ namespace TaskMaster.IntegrationTests
             Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
         }
 
+        [Fact]
+        public async Task Test_RemoveSuccessfullyRemovesTaskAndAddsNotification()
+        {
+            int taskId = 1;
+
+            var taskModel = new TaskInfoModel { Id = taskId, UserId = userId };
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(taskModel);
+            _taskServiceMock.Setup(service => service.DeleteAsync(taskId)).Returns(Task.CompletedTask);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Remove(taskId) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+            _taskServiceMock.Verify(service => service.DeleteAsync(taskId), Times.Once);
+            _notificationServiceMock.Verify(service => service.AddAsync(It.IsAny<NotificationFormModel>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_RemoveDoesNotRemoveTaskIfNotBelongsToUser()
+        {
+            int taskId = 1;
+
+            var taskModel = new TaskInfoModel { Id = taskId, UserId = "DifferentUserId" };
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(taskModel);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Remove(taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+            _taskServiceMock.Verify(service => service.DeleteAsync(It.IsAny<int>()), Times.Never);
+            _notificationServiceMock.Verify(service => service.AddAsync(It.IsAny<NotificationFormModel>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Test_RemoveAddsNotificationAndRedirectsToNotificationsWhenExceptionOccurs()
+        {
+            int taskId = 1;
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ThrowsAsync(new System.Exception("Database error"));
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Remove(taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.Notifications), result.ActionName);
+            _notificationServiceMock.Verify(service => service.AddAsync(It.IsAny<NotificationFormModel>()), Times.Once);
+        }
+
         private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
