@@ -146,6 +146,46 @@ namespace TaskMaster.IntegrationTests
             Assert.Equal(model, result.Model);
         }
 
+        [Fact]
+        public async Task Test_NotificationsReturnsViewWithModel()
+        {
+            int currentPage = 1; 
+            var expectedModel = new NotificationPageModel();
+
+            _notificationServiceMock
+                .Setup(service => service.GetNotificationsForPageAsync(userId, currentPage))
+                .ReturnsAsync(expectedModel);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Notifications(currentPage) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(expectedModel, result.Model);
+            _notificationServiceMock.Verify(service => service.GetNotificationsForPageAsync(userId, currentPage), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_NotificationsReturnsViewWithModelForDifferentPage()
+        {
+            int currentPage = 2;
+            var expectedModel = new NotificationPageModel();
+
+            _notificationServiceMock
+                .Setup(service => service.GetNotificationsForPageAsync(userId, currentPage))
+                .ReturnsAsync(expectedModel);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Notifications(currentPage) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(expectedModel, result.Model);
+            _notificationServiceMock.Verify(service => service.GetNotificationsForPageAsync(userId, currentPage), Times.Once);
+        }
+
         private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
