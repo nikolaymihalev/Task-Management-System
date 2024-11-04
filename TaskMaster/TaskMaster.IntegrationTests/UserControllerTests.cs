@@ -5,6 +5,7 @@ using Moq;
 using System.Security.Claims;
 using TaskMaster.Controllers;
 using TaskMaster.Core.Contracts;
+using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Models.User;
 using Xunit;
@@ -56,7 +57,7 @@ namespace TaskMaster.IntegrationTests
                 .Setup(service => service.GetStatisticsAsync(It.IsAny<string>()))
                 .ReturnsAsync(expectedModel);
 
-            _userController.ControllerContext = CreateController();
+            _userController.ControllerContext = CreateControllerContext();
 
             var result = await _userController.Dashboard() as ViewResult;
 
@@ -76,7 +77,7 @@ namespace TaskMaster.IntegrationTests
                 .Setup(service => service.GetTasksForPageAsync(It.IsAny<string>(), testCurrentPage))
                 .ReturnsAsync(expectedModel);
 
-            _userController.ControllerContext = CreateController();
+            _userController.ControllerContext = CreateControllerContext();
 
             var result = await _userController.MyTasks(testCurrentPage) as ViewResult;
 
@@ -86,7 +87,66 @@ namespace TaskMaster.IntegrationTests
             _taskServiceMock.Verify(service => service.GetTasksForPageAsync(userId, testCurrentPage), Times.Once);
         }
 
-        private ControllerContext CreateController()
+        [Fact]
+        public void Test_NewTaskGetReturnsViewWithNewModel()
+        {
+            var result = _userController.NewTask() as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            var model = result.Model as TaskFormModel;
+            Assert.NotNull(model);
+            Assert.Equal(DateTime.Now.Date, model.DueTime.Date);
+        }
+
+        [Fact]
+        public async Task Test_NewTaskPostValidModelRedirectsToMyTasks()
+        {
+            var model = new TaskFormModel();
+            _taskServiceMock.Setup(service => service.AddAsync(model)).Returns(Task.CompletedTask);
+            _notificationServiceMock.Setup(service => service.AddAsync(It.IsAny<NotificationFormModel>())).Returns(Task.CompletedTask);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.NewTask(model) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(_userController.MyTasks), result.ActionName);
+            Assert.Equal(userId, model.UserId);
+            Assert.Equal(0, model.Status);
+            _taskServiceMock.Verify(service => service.AddAsync(model), Times.Once);
+            _notificationServiceMock.Verify(service => service.AddAsync(It.Is<NotificationFormModel>(n => n.UserId == userId && n.Message == "Added new task!")), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_NewTaskPostInvalidModelReturnsViewWithModel()
+        {
+            var model = new TaskFormModel();
+            _userController.ModelState.AddModelError("Title", "Title is required");
+
+            var result = await _userController.NewTask(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(model, result.Model);
+        }
+
+        [Fact]
+        public async Task Test_NewTaskPostExceptionReturnsViewWithModel()
+        {
+            var model = new TaskFormModel();
+            _taskServiceMock.Setup(service => service.AddAsync(model)).ThrowsAsync(new Exception());
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.NewTask(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(model, result.Model);
+        }
+
+        private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
