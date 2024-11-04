@@ -122,6 +122,7 @@ namespace TaskMaster.IntegrationTests
         public async Task Test_NewTaskPostInvalidModelReturnsViewWithModel()
         {
             var model = new TaskFormModel();
+
             _userController.ModelState.AddModelError("Title", "Title is required");
 
             var result = await _userController.NewTask(model) as ViewResult;
@@ -184,6 +185,57 @@ namespace TaskMaster.IntegrationTests
             Assert.IsType<ViewResult>(result);
             Assert.Equal(expectedModel, result.Model);
             _notificationServiceMock.Verify(service => service.GetNotificationsForPageAsync(userId, currentPage), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_TaskReturnsViewWithModelWhenTaskBelongsToUser()
+        {
+            int taskId = 1;
+
+            var expectedModel = new TaskInfoModel { Id = taskId, UserId = userId };
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(expectedModel);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Task(taskId) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(expectedModel, result.Model);
+        }
+
+        [Fact]
+        public async Task Test_TaskThrowsArgumentExceptionWhenTaskDoesNotBelongToUser()
+        {
+            int taskId = 1;
+
+            var expectedModel = new TaskInfoModel { Id = taskId, UserId = "DifferentUserId" };
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(expectedModel);
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Task(taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+        }
+
+        [Fact]
+        public async Task Test_TaskRedirectsToMyTasksWhenExceptionOccurs()
+        {
+            int taskId = 1;
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ThrowsAsync(new System.Exception("Database error"));
+
+            _userController.ControllerContext = CreateControllerContext();
+
+            var result = await _userController.Task(taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
         }
 
         private ControllerContext CreateControllerContext()
