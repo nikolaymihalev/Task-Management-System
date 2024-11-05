@@ -12,6 +12,7 @@ using TaskMaster.Core.Models.Task;
 using TaskMaster.Core.Models.User;
 using Xunit;
 using Assert = Xunit.Assert;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Task = System.Threading.Tasks.Task;
 
 namespace TaskMaster.IntegrationTests
@@ -670,6 +671,83 @@ namespace TaskMaster.IntegrationTests
             Assert.True(_userController.ModelState.ContainsKey(""));
             Assert.Equal("Password too weak", _userController.ModelState[""].Errors[0].ErrorMessage);
             _userManagerMock.Verify(manager => manager.CreateAsync(It.IsAny<IdentityUser>(), model.Password), Times.Once);
+        }
+
+        [Fact]
+        public void Test_LoginGetReturnsViewWithModelWhenUserIsNotAuthenticated()
+        {
+            _userController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+            };
+
+            var result = _userController.Login() as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<LoginViewModel>(result.Model);
+        }
+
+        [Fact]
+        public async Task Test_LoginPostReturnsViewWithModelWhenModelStateIsInvalid()
+        {
+            var model = new LoginViewModel();
+            _userController.ModelState.AddModelError("Email", "Required");
+
+            var result = await _userController.Login(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Same(model, result.Model);
+        }
+
+        [Fact]
+        public async Task Test_LoginPostRedirectsToHomeWhenLoginIsSuccessful()
+        {
+            var model = new LoginViewModel
+            {
+                Email = "test@example.com",
+                Password = "Test@123"
+            };
+            var user = new IdentityUser { Email = model.Email };
+
+            _userManagerMock.Setup(manager => manager.FindByEmailAsync(model.Email))
+                .ReturnsAsync(user);
+
+            _signInManagerMock.Setup(manager => manager.PasswordSignInAsync(user, model.Password, false, false))
+                .ReturnsAsync(SignInResult.Success);
+
+            var result = await _userController.Login(model) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+            _userManagerMock.Verify(manager => manager.FindByEmailAsync(model.Email), Times.Once);
+            _signInManagerMock.Verify(manager => manager.PasswordSignInAsync(user, model.Password, false, false), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_LoginPostReturnsViewWithErrorWhenLoginFails()
+        {
+            var model = new LoginViewModel
+            {
+                Email = "test@example.com",
+                Password = "WrongPassword"
+            };
+            var user = new IdentityUser { Email = model.Email };
+
+            _userManagerMock.Setup(manager => manager.FindByEmailAsync(model.Email))
+                .ReturnsAsync(user);
+
+            _signInManagerMock.Setup(manager => manager.PasswordSignInAsync(user, model.Password, false, false))
+                .ReturnsAsync(SignInResult.Failed);
+
+            var result = await _userController.Login(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Same(model, result.Model);
+            Assert.True(_userController.ModelState.ContainsKey(""));
+            Assert.Equal("Invalid login", _userController.ModelState[""].Errors[0].ErrorMessage);
+            _userManagerMock.Verify(manager => manager.FindByEmailAsync(model.Email), Times.Once);
+            _signInManagerMock.Verify(manager => manager.PasswordSignInAsync(user, model.Password, false, false), Times.Once);
         }
 
         private ControllerContext CreateControllerContext()
