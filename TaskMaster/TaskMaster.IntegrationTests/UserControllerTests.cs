@@ -621,6 +621,57 @@ namespace TaskMaster.IntegrationTests
             Assert.IsType<UnauthorizedResult>(result);
         }
 
+        [Fact]
+        public void Test_RegisterGetReturnsViewWithModelWhenUserIsNotAuthenticated()
+        {
+            _userController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+            };
+
+            var result = _userController.Register() as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<RegisterViewModel>(result.Model);
+        }
+
+        [Fact]
+        public async Task Test_RegisterPostReturnsViewWithModelWhenModelStateIsInvalid()
+        {
+            var model = new RegisterViewModel();
+            _userController.ModelState.AddModelError("Email", "Required");
+
+            var result = await _userController.Register(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Same(model, result.Model);
+        }        
+
+        [Fact]
+        public async Task Test_RegisterPostReturnsViewWithErrorsWhenRegistrationFails()
+        {
+            var model = new RegisterViewModel
+            {
+                Email = "test@example.com",
+                UserName = "testuser",
+                Password = "Test@123"
+            };
+
+            var identityError = new IdentityError { Description = "Password too weak" };
+            var failedResult = IdentityResult.Failed(identityError);
+
+            _userManagerMock.Setup(manager => manager.CreateAsync(It.IsAny<IdentityUser>(), model.Password))
+                .ReturnsAsync(failedResult);
+
+            var result = await _userController.Register(model) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Same(model, result.Model);
+            Assert.True(_userController.ModelState.ContainsKey(""));
+            Assert.Equal("Password too weak", _userController.ModelState[""].Errors[0].ErrorMessage);
+            _userManagerMock.Verify(manager => manager.CreateAsync(It.IsAny<IdentityUser>(), model.Password), Times.Once);
+        }
+
         private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
