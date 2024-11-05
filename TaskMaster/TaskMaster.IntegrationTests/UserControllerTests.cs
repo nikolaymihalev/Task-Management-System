@@ -750,6 +750,24 @@ namespace TaskMaster.IntegrationTests
             _signInManagerMock.Verify(manager => manager.PasswordSignInAsync(user, model.Password, false, false), Times.Once);
         }
 
+        [Fact]
+        public async Task Test_LogoutCallsSignOutAsync()
+        {
+            await _userController.Logout();
+
+            _signInManagerMock.Verify(s => s.SignOutAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_LogoutRedirectsToHomeIndex()
+        {
+            var result = await _userController.Logout() as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+        }
+
         private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
