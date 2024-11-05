@@ -489,6 +489,138 @@ namespace TaskMaster.IntegrationTests
             Assert.Null(result);
         }
 
+        [Fact]
+        public async Task Test_UpdateGetReturnsViewWithModelWhenTaskExistsAndBelongsToUser()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            var task = new TaskInfoModel
+            {
+                Id = taskId,
+                UserId = userId,
+                Status = "ToDo",
+                Priority = "High"
+            };
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(task);
+
+            var result = await _userController.Update(taskId) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<TaskFormModel>(result.Model);
+            var model = result.Model as TaskFormModel;
+            Assert.Equal(taskId, model.Id);
+            Assert.Equal((int)Enum.Parse(typeof(Core.Enums.TaskStatus), task.Status), model.Status);
+            Assert.Equal((int)Enum.Parse(typeof(TaskPriority), task.Priority), model.Priority);
+        }
+
+        [Fact]
+        public async Task Test_UpdateGetRedirectsToMyTasksWhenExceptionOccurs()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var result = await _userController.Update(taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+        }
+
+        [Fact]
+        public async Task Test_UpdateGetReturnsUnauthorizedWhenTaskDoesNotBelongToUser()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            var task = new TaskInfoModel
+            {
+                Id = taskId,
+                UserId = "OtherUserId"
+            };
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(task);
+
+            var result = await _userController.Update(taskId);
+
+            Assert.IsType<UnauthorizedResult>(result);
+        }
+
+        [Fact]
+        public async Task Test_UpdatePostSuccessfullyUpdatesTaskWhenTaskBelongsToUser()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            var task = new TaskInfoModel
+            {
+                Id = taskId,
+                UserId = userId
+            };
+
+            var model = new TaskFormModel
+            {
+                Id = taskId,
+                Status = 1,
+                Priority = 1
+            };
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(task);
+
+            _taskServiceMock.Setup(service => service.UpdateAsync(model)).Returns(Task.CompletedTask);
+
+            var result = await _userController.Update(model, taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+            _taskServiceMock.Verify(service => service.UpdateAsync(model), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_UpdatePostRedirectsToMyTasksWhenExceptionOccurs()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var model = new TaskFormModel { Id = taskId };
+
+            var result = await _userController.Update(model, taskId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.MyTasks), result.ActionName);
+        }
+
+        [Fact]
+        public async Task Test_UpdatePostReturnsUnauthorizedWhenTaskDoesNotBelongToUser()
+        {
+            int taskId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            var task = new TaskInfoModel
+            {
+                Id = taskId,
+                UserId = "OtherUserId"
+            };
+
+            var model = new TaskFormModel { Id = taskId };
+
+            _taskServiceMock.Setup(service => service.GetTaskByIdAsync(taskId))
+                .ReturnsAsync(task);
+
+            var result = await _userController.Update(model, taskId);
+
+            Assert.IsType<UnauthorizedResult>(result);
+        }
+
         private ControllerContext CreateControllerContext()
         {
             var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
