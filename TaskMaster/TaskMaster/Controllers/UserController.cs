@@ -220,6 +220,9 @@ namespace TaskMaster.Controllers
                 return RedirectToAction(nameof(MyTasks));
             }
 
+            if(task == null)
+                return RedirectToAction(nameof(MyTasks));
+
             if (task.UserId != User.Id())
                 return Unauthorized();
 
