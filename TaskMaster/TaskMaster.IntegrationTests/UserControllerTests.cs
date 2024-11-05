@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
 using TaskMaster.Controllers;
+using TaskMaster.Core.Constants;
 using TaskMaster.Core.Contracts;
 using TaskMaster.Core.Models.Notification;
 using TaskMaster.Core.Models.Task;
@@ -293,6 +294,38 @@ namespace TaskMaster.IntegrationTests
             Assert.NotNull(result);
             Assert.Equal(nameof(UserController.Notifications), result.ActionName);
             _notificationServiceMock.Verify(service => service.AddAsync(It.IsAny<NotificationFormModel>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_RemoveNotificationSuccessfullyDeletesNotification()
+        {
+            int notificationId = 1;
+            _notificationServiceMock.Setup(service => service.DeleteAsync(notificationId)).Returns(Task.CompletedTask);
+
+            var result = await _userController.RemoveNotification(notificationId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.Notifications), result.ActionName);
+            _notificationServiceMock.Verify(service => service.DeleteAsync(notificationId), Times.Once);
+        }
+
+        [Fact]
+        public async Task Test_RemoveNotificationAddsFailureNotificationAndRedirectsWhenExceptionOccurs()
+        {
+            int notificationId = 1;
+            _userController.ControllerContext = CreateControllerContext();
+
+            _notificationServiceMock.Setup(service => service.DeleteAsync(notificationId))
+                .ThrowsAsync(new Exception("Deletion error"));
+
+            var result = await _userController.RemoveNotification(notificationId) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(UserController.Notifications), result.ActionName);
+            _notificationServiceMock.Verify(service => service.AddAsync(It.Is<NotificationFormModel>(
+                n => n.Message == Messages.OperationFailedErrorMessage &&
+                     n.UserId == userId
+            )), Times.Once);
         }
 
         private ControllerContext CreateControllerContext()
