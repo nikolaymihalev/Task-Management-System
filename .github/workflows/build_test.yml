@@ -20,4 +20,4 @@ jobs:
     - name: Build
       run: dotnet build TaskMaster/TaskMaster.sln --no-restore
     - name: Test
-      run: dotnet test TaskMaster/TaskMaster.IntegrationTests/TaskMaster.IntegrationTests.csproj --no-build --verbosity normal
+      run: dotnet test TaskMaster/TaskMaster.sln --no-build --verbosity normal
