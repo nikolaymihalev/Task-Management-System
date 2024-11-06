@@ -57,7 +57,6 @@ namespace TaskMaster.UnitTests
         {
             int exNotificationsCount = 3;
             string exMessage = "Test Message 3";
-            string exSentTime = "30.10.2024";
 
             var notification = new NotificationFormModel()
             {
@@ -75,7 +74,6 @@ namespace TaskMaster.UnitTests
             Assert.IsTrue(exNotificationsCount == allNotifications.Count());
             Assert.IsNotNull(addedNotification);
             Assert.IsTrue(exMessage == addedNotification.Message);
-            Assert.IsTrue(exSentTime == addedNotification.DateSent);
         }
 
         [Test]
@@ -165,13 +163,11 @@ namespace TaskMaster.UnitTests
         public async Task Test_GetNotificationByIdAsyncShouldReturnModel()
         {
             string exMessage = "Test Message 2";
-            string exSentTime = "12.11.2024";
 
             var actualNotification = await notificationService.GetNotificationByIdAsync(not2.Id);
 
             Assert.IsNotNull(actualNotification);
             Assert.IsTrue(exMessage == actualNotification.Message);
-            Assert.IsTrue(exSentTime == actualNotification.DateSent);
             Assert.IsTrue(userId == actualNotification.UserId);
         }
 

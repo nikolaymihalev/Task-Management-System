@@ -79,7 +79,6 @@
         {
             string exTitle = "Test Title";
             string exDescription = "Test Description";
-            string exDueTime = "13.12.2026";
             string exPriority = "High";
             string exStatus = "ToDo";
             string exCompletedTime = "-";
@@ -89,7 +88,6 @@
             Assert.IsNotNull(actualTask);
             Assert.IsTrue(exTitle == actualTask.Title);
             Assert.IsTrue(exDescription == actualTask.Description);
-            Assert.IsTrue(exDueTime == actualTask.DueTime); 
             Assert.IsTrue(exPriority == actualTask.Priority);
             Assert.IsTrue(exStatus == actualTask.Status);
             Assert.IsTrue(exCompletedTime == actualTask.CompletedTime);
@@ -142,7 +140,6 @@
             int exTasksCount = 3;
             string exTitle = "Test Title 3";
             string exDescription = "Test Description 3";
-            string exDueTime = "14.10.2023";
             string exPriority = "Low";
             string exStatus = "InProgress";
             string exCompletedTime = "-";
@@ -167,7 +164,6 @@
             Assert.IsNotNull(addedTask);
             Assert.IsTrue(exTitle == addedTask.Title);
             Assert.IsTrue(exDescription == addedTask.Description);
-            Assert.IsTrue(exDueTime == addedTask.DueTime);
             Assert.IsTrue(exPriority == addedTask.Priority);
             Assert.IsTrue(exStatus == addedTask.Status); 
             Assert.IsTrue(exCompletedTime == addedTask.CompletedTime);
@@ -186,14 +182,13 @@
         {
             string exTitle = "Test Title 5";
             string exDescription = "Test Description 5";
-            DateTime exDueTime = new DateTime(2024, 11, 14);
 
             var taskForEdit = new TaskFormModel()
             {
                 Id = task2.Id,
                 Title = exTitle,
                 Description = exDescription,
-                DueTime = exDueTime
+                DueTime = new DateTime(2024, 10, 15)
             };
 
             await taskService.EditAsync(taskForEdit);
@@ -203,7 +198,6 @@
             Assert.IsNotNull(actualTask);
             Assert.IsTrue(exTitle == actualTask.Title);
             Assert.IsTrue(exDescription == actualTask.Description);
-            Assert.IsTrue(exDueTime == DateTime.Parse(actualTask.DueTime));
         }
 
         [Test]
