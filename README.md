@@ -18,8 +18,7 @@ This project includes a CI/CD pipeline using GitHub Actions for automated build 
 - Restore dependencies
 - Build
 - Test
-These steps help maintain continuous integration, ensuring the code is always in a deployable state. With each push or pull request, the GitHub Action workflow is triggered, allowing for consistent and reliable testing and deployment processes.
-
+  
 ## Project Structure
 The solution is organized into five primary projects:
 - [TaskMaster](#taskmaster-web-application)
